@@ -51,6 +51,11 @@ jenkins:
                         git:
                           #id: "github-access-token"
                           remote: "https://github.com/jenkins-infra/pipeline-library.git"
+        location: |
+          unclassified:
+            location:
+              adminAddress: "nobody@jenkins.io"
+              url: "https://ci.jenkins.io"
     overwritePlugins: true  
     installPlugins:
       - ansicolor
