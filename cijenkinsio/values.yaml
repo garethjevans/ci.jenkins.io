@@ -9,15 +9,30 @@ jenkins:
         matrix-settings: |
           jenkins:
             authorizationStrategy:
-              globalMatrix:
-                grantedPermissions:
-                  - "Overall/Administer:admins"
-                  - "Overall/SystemRead:all"
-                  - "Overall/Read:all"
-                  - "Job/Read:all"
-                  - "Job/Build:all"
-                  - "Job/ExtendedRead:all"
+              loggedInUsersCanDoAnything:
+                allowAnonymousRead: true
 
+        jobs-settings: |
+          jobs:
+            - script: >
+                multibranchPipelineJob('testrepo1') {
+                  displayName "Test Repo 1"
+                  description "Test Repo 1"
+                  branchSources {
+                    github {
+                      id('2019081602')
+                      //scanCredentialsId('github-access-token')
+                      repoOwner('garethjevans')
+                      repository('test-repo1')
+                      includes('main')
+                    }
+                  }
+                  factory {
+                    workflowBranchProjectFactory {
+                      scriptPath('Jenkinsfile')
+                    }
+                  }
+                }
     overwritePlugins: true  
     installPlugins:
       - ansicolor
