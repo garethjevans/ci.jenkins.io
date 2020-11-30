@@ -66,17 +66,17 @@ jenkins:
             clouds:
               - kubernetes:
                   containerCapStr: "100"
-                  jenkinsTunnel: "jenkins-infra-agent:50000"
-                  jenkinsUrl: "http://jenkins-infra:8080"
+                  jenkinsTunnel: "cijenkinsio-agent:50000"
+                  jenkinsUrl: "http://cijenkinsio:8080"
                   maxRequestsPerHostStr: "300"
                   name: "kubernetes"
-                  namespace: "jenkins-infra"
+                  namespace: "cijenkinsio"
                   podRetention: "Never"
                   serverUrl: "https://kubernetes.default"
                   podLabels:
                     # Required to be jenkins/<helm-release>-jenkins-slave as definede here
                     # https://github.com/helm/charts/blob/ef0d749132ecfa61b2ea47ccacafeaf5cf1d3d77/stable/jenkins/templates/jenkins-master-networkpolicy.yaml#L27
-                    - key: "jenkins/jenkins-infra-agent"
+                    - key: "jenkins/cijenkinsio-agent"
                       value: "true"
                   templates:
                     - name: jnlp-linux
