@@ -1,0 +1,11 @@
+apiVersion: v2
+name: cijenkinsio
+description: A Helm chart for Kubernetes
+type: application
+version: 0.1.0
+appVersion: 0.1.0
+
+dependencies:
+- name: jenkins
+  version: 3.0.2
+  repository: https://charts.jenkins.io

@@ -1,0 +1,109 @@
+# Default values for cijenkinsio.
+#
+jenkins:
+  controller:
+    tag: "2.249.3-lts"
+    JCasC:
+      enabled: true
+      configScripts:  
+        matrix-settings: |
+          jenkins:
+            authorizationStrategy:
+              globalMatrix:
+                grantedPermissions:
+                  - "Overall/Administer:admins"
+                  - "Overall/SystemRead:all"
+                  - "Overall/Read:all"
+                  - "Job/Read:all"
+                  - "Job/Build:all"
+                  - "Job/ExtendedRead:all"
+
+    overwritePlugins: true  
+    installPlugins:
+      - ansicolor
+      - antisamy-markup-formatter
+      - authentication-tokens
+      - basic-branch-build-strategies
+      - blueocean
+      - blueocean-autofavorite
+      - blueocean-commons
+      - blueocean-config
+      - blueocean-core-js
+      - blueocean-dashboard
+      - blueocean-display-url
+      - blueocean-events
+      - blueocean-git-pipeline
+      - blueocean-github-pipeline
+      - blueocean-i18n
+      - blueocean-jira
+      - blueocean-jwt
+      - blueocean-personalization
+      - blueocean-pipeline-api-impl
+      - blueocean-pipeline-editor
+      - blueocean-pipeline-scm-api
+      - blueocean-rest
+      - blueocean-rest-impl
+      - blueocean-web
+      - branch-api
+      - build-name-setter
+      - config-file-provider
+      - configuration-as-code
+      - credentials
+      - credentials-binding
+      - extended-read-permission
+      - git
+      - git-client
+      - github
+      - github-api
+      - github-branch-source
+      - github-checks
+      - inline-pipeline
+      - jira
+      - job-dsl
+      - junit
+      - kubernetes
+      - ldap
+      - lockable-resources
+      - pipeline-utility-steps
+      - matrix-auth
+      - matrix-project
+      - pipeline-build-step
+      - pipeline-graph-analysis
+      - pipeline-input-step
+      - pipeline-milestone-step
+      - pipeline-model-api
+      - pipeline-model-definition
+      - pipeline-model-extensions
+      - pipeline-rest-api
+      - pipeline-stage-step
+      - pipeline-stage-tags-metadata
+      - pipeline-stage-view
+      - plain-credentials
+      - prometheus
+      - scm-api
+      - script-security
+      - ssh-agent
+      - ssh-credentials
+      - support-core
+      - token-macro
+      - variant
+      - warnings-ng
+      - workflow-aggregator
+      - workflow-api
+      - workflow-basic-steps
+      - workflow-cps
+      - workflow-cps-global-lib
+      - workflow-durable-task-step
+      - workflow-job
+      - workflow-multibranch
+      - workflow-scm-step
+      - workflow-step-api
+      - workflow-support
+      - javadoc
+      - metrics
+
+
+    ingress:
+      enabled: true
+      apiVersion: "networking.k8s.io/v1beta1"
+
