@@ -14,4 +14,4 @@ jobs:
         version: ${{ matrix.k8s_version }}
     - name: Test on k3s
       run: |
-        make deploy
+        make init
