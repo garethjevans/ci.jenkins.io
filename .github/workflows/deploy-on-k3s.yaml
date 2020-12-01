@@ -8,4 +8,4 @@ jobs:
       uses: helm/kind-action@v1.1.0  
     - name: Test on k3s
       run: |
-        make init
+        helm dependency build cijenkinsio
