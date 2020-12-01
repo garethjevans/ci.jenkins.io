@@ -13,3 +13,7 @@ deploy: build
 test:
 		helm test $(CHART)
 		kubectl logs $(CHART)-test-connection
+
+delete:
+		helm uninstall $(CHART)
+

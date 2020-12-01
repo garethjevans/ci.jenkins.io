@@ -8,8 +8,8 @@ jenkins:
     tag: "2.249.3-lts"
     JCasC:
       enabled: true
+      defaultConfig: false
       configScripts:
-
         no-executors: |
           jenkins:
             numExecutors: 0
