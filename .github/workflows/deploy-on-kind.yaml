@@ -37,4 +37,4 @@ jobs:
       run: helm test cijenkinsio
 
     - name: Test Logs
-      run: helm logs cijenkinsio-test-connection
+      run: kubectl logs cijenkinsio-test-connection
