@@ -5,7 +5,7 @@ jenkins:
     enabled: true
     size: 100Gi
   controller:
-    tag: "2.249.3-lts"
+    tag: "2.263.1-lts"
     JCasC:
       enabled: true
       defaultConfig: false
