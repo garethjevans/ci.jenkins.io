@@ -85,7 +85,7 @@ jenkins:
               dockerLabel: "docker"
             pollSCM:
               pollingThreadCount: 10
-            timestamperConfig:
+            timestamper:
               allPipelines: true
 
         jobs-settings: |
