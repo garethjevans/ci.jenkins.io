@@ -23,5 +23,5 @@ jobs:
     - name: Deploy Chart
       run: helm upgrade --install cijenkinsio cijenkinsio
 
-    - name: Set up chart-testing
-      uses: helm/chart-testing-action@v2.0.1    
+    - name: Test Chart
+      run: helm test cijenkinsio
