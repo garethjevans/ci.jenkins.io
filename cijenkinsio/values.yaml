@@ -18,7 +18,22 @@ jenkins:
           jenkins:
             authorizationStrategy:
               loggedInUsersCanDoAnything:
-                allowAnonymousRead: true
+                allowAnonymousRead: false
+
+        security-realm: |
+          jenkins:
+            securityRealm:
+              local:
+                allowsSignup: false
+                users:
+                  - id: "admin"
+                    password: "p4ssw0rd"
+
+        misc-jenkins: |
+          jenkins:
+            remotingSecurity:
+              enabled: true
+            slaveAgentPort: 50000
 
         system-message: |
           jenkins:
@@ -50,6 +65,28 @@ jenkins:
             crumbIssuer:
               standard:
                 excludeClientIPFromCrumb: true
+
+        misc-security: |
+          security:
+            apiToken:
+              creationOfLegacyTokenEnabled: false
+              tokenGenerationOnCreationEnabled: false
+              usageStatisticsEnabled: true
+
+        misc-unclassified: |
+          unclassified:
+            appInsightsGlobalConfig:
+              appInsightsEnabled: false
+            gitSCM:
+              createAccountBasedOnEmail: false
+              globalConfigEmail: "oscar@example.com"
+              globalConfigName: "oscar"
+            pipeline-model-docker:
+              dockerLabel: "docker"
+            pollSCM:
+              pollingThreadCount: 10
+            timestamperConfig:
+              allPipelines: true
 
         jobs-settings: |
           jobs:
