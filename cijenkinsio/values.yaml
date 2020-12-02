@@ -45,6 +45,12 @@ jenkins:
               rawHtml:
                 disableSyntaxHighlighting: false
 
+        crumb-issuer: |
+          jenkins:
+            crumbIssuer:
+              standard:
+                excludeClientIPFromCrumb: true
+
         jobs-settings: |
           jobs:
             - script: >
