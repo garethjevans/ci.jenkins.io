@@ -114,6 +114,8 @@ jenkins:
       - ansicolor
       - antisamy-markup-formatter
       - authentication-tokens
+      - azure-container-agents
+      - azure-vm-agents
       - basic-branch-build-strategies
       - blueocean
       - blueocean-autofavorite
@@ -138,9 +140,13 @@ jenkins:
       - branch-api
       - build-name-setter
       - config-file-provider
+      - cloud-stats  
       - configuration-as-code
       - credentials
       - credentials-binding
+        #      - datadog
+      - ec2
+      - embeddable-build-status
       - extended-read-permission
       - git
       - git-client
@@ -148,14 +154,18 @@ jenkins:
       - github-api
       - github-branch-source
       - github-checks
+      - groovy  
       - inline-pipeline
+      - javadoc  
       - jira
       - job-dsl
       - junit
       - kubernetes
+      - kubernetes-credentials
       - ldap
       - lockable-resources
       - pipeline-utility-steps
+      - metrics  
       - matrix-auth
       - matrix-project
       - pipeline-build-step
@@ -163,6 +173,7 @@ jenkins:
       - pipeline-input-step
       - pipeline-milestone-step
       - pipeline-model-api
+      - pipeline-model-declarative-agent
       - pipeline-model-definition
       - pipeline-model-extensions
       - pipeline-rest-api
@@ -176,7 +187,9 @@ jenkins:
       - ssh-agent
       - ssh-credentials
       - support-core
+      - timestamper  
       - token-macro
+      - toolenv
       - variant
       - warnings-ng
       - workflow-aggregator
@@ -190,8 +203,6 @@ jenkins:
       - workflow-scm-step
       - workflow-step-api
       - workflow-support
-      - javadoc
-      - metrics
 
 
     ingress:
