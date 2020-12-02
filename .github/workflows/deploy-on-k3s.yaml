@@ -17,5 +17,11 @@ jobs:
     - name: Create k8s Kind Cluster
       uses: helm/kind-action@v1.1.0
 
-    - name: Test on k3s
+    - name: Build Chart
       run: helm dependency build cijenkinsio
+
+    - name: Deploy Chart
+      run: helm upgrade --install cijenkinsio cijenkinsio
+
+    - name: Set up chart-testing
+      uses: helm/chart-testing-action@v2.0.1    
