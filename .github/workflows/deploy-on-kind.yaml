@@ -35,3 +35,6 @@ jobs:
 
     - name: Test Chart
       run: helm test cijenkinsio
+
+    - name: Test Logs
+      run: helm logs cijenkinsio-test-connection
