@@ -31,7 +31,7 @@ jobs:
       uses: helm/kind-action@v1.1.0
 
     - name: Deploy Chart
-      run: helm upgrade --install cijenkinsio cijenkinsio
+      run: helm upgrade --install --wait cijenkinsio cijenkinsio
 
     - name: Test Chart
       run: helm test cijenkinsio
