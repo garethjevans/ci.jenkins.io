@@ -19,7 +19,32 @@ jenkins:
             authorizationStrategy:
               loggedInUsersCanDoAnything:
                 allowAnonymousRead: true
- 
+
+        system-message: |
+          jenkins:
+            systemMessage: |
+              <div>
+                <h1>About ci.jenkins.io</h1>
+                <p>This instance hosts several <a href="https://plugins.jenkins.io/github-branch-source">GitHub Organization folders</a> organized by subject area.</p>
+                <p>To add continuous integration and PR builds for a Jenkins plugin in the <code>jenkinsci</code> organization,
+                just add a <a href="https://jenkins.io/doc/book/pipeline/jenkinsfile/"><code>Jenkinsfile</code></a> to your repository.
+                You'll likely only need one line:</p>
+                <pre>    buildPlugin()</pre>
+                <p>Learn more:</p>
+                <ul>
+                  <li><a href="https://jenkins.io/projects/infrastructure/#jenkins">About the Jenkins infrastructure project</a></li>
+                  <li><a href="https://github.com/jenkins-infra/documentation/blob/master/ci.adoc#jenkins-on-jenkins">Infrastructure documentation: ci.jenkins.io</a></li>
+                  <li><a href="https://github.com/jenkins-infra/pipeline-library#pipeline-global-library">Infrastructure documentation: Pipeline library</a></li>
+                  <li><a href="https://github.com/jenkins-infra/charts/blob/master/config/cijenkinsio/jenkins.yaml">configuration-as-code for ci.jenkins.io</a></li>
+                </ul>
+              </div>
+
+        markup-formatter: |
+          jenkins:
+            markupFormatter:
+              rawHtml:
+                disableSyntaxHighlighting: false
+
         jobs-settings: |
           jobs:
             - script: >
