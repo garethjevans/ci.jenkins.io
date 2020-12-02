@@ -21,14 +21,14 @@ jobs:
     - name: Set up chart-testing
       uses: helm/chart-testing-action@v2.0.1
 
+    - name: Build Chart
+      run: helm dependency build cijenkinsio
+
     - name: Run chart-testing (lint)
       run: helm lint cijenkinsio
 
     - name: Create Kind Cluster
       uses: helm/kind-action@v1.1.0
-
-    - name: Build Chart
-      run: helm dependency build cijenkinsio
 
     - name: Deploy Chart
       run: helm upgrade --install cijenkinsio cijenkinsio
