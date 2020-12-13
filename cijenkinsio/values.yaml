@@ -100,6 +100,11 @@ jenkins:
                       //scanCredentialsId('github-access-token')
                       repoOwner('garethjevans')
                       repository('test-repo1')
+                      traits {
+                        gitHubBranchDiscovery {
+                          strategyId(2) // 2-only branches that are pull requests
+                        }
+                      }
                     }
                   }
                   factory {
