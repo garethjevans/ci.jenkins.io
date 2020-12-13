@@ -100,7 +100,6 @@ jenkins:
                       //scanCredentialsId('github-access-token')
                       repoOwner('garethjevans')
                       repository('test-repo1')
-                      includes('main')
                     }
                   }
                   factory {
