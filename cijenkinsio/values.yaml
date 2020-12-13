@@ -95,11 +95,53 @@ jenkins:
                   displayName "Test Repo 1"
                   description "Test Repo 1"
                   branchSources {
-                    github {
-                      id('2019081602')
-                      //scanCredentialsId('github-access-token')
-                      repoOwner('garethjevans')
-                      repository('test-repo1')
+                    branchSource {
+                      source {
+                        github {
+                          //credentialsId("github-access-token")
+                          configuredByUrl(true)
+                          repositoryUrl('https://github.com/garethjevans/test-repo1')
+                          repoOwner('garethjevans')
+                          repository('test-repo1')
+                          traits {
+                            gitHubBranchDiscovery {
+                              strategyId(2) // 2-only branches that are pull requests
+                            }
+                            pruneStaleBranchTrait()
+                            gitHubTagDiscovery()
+                          }
+                        }
+                        buildStrategies {
+                          buildAnyBranches {
+                            strategies {
+                              buildAllBranches {
+                                strategies {
+                                  buildNamedBranches {
+                                    filters {
+                                      exact {
+                                        name("main")
+                                        caseSensitive(true)
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                          buildAnyBranches {
+                            strategies {
+                              buildAllBranches {
+                                strategies {
+                                  buildTags {
+                                    atLeastDays '-1'
+                                    atMostDays '3'
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
                     }
                   }
                   factory {
@@ -108,7 +150,6 @@ jenkins:
                     }
                   }
                 }
- 
         pipeline-library: |
           unclassified:
             globalLibraries:
