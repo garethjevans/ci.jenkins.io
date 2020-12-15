@@ -314,3 +314,8 @@ kubernetes-external-secrets:
   serviceAccount:
     annotations:
       iam.gke.io/gcp-service-account: google-secrets-sa@gevans-test.iam.gserviceaccount.com
+
+github:
+  token:
+    project: gevans-test
+    username: garethjevans
