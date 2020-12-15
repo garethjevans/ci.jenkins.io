@@ -272,6 +272,7 @@ jenkins:
       - matrix-auth
       - matrix-project
       - pipeline-build-step
+      - pipeline-github
       - pipeline-graph-analysis
       - pipeline-input-step
       - pipeline-milestone-step
