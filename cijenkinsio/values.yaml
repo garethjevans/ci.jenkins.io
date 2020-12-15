@@ -1,3 +1,4 @@
+---
 # Default values for cijenkinsio.
 #
 jenkins:
@@ -12,7 +13,7 @@ jenkins:
       configScripts:
         no-executors: |
           jenkins:
-            numExecutors: 0
+            numExecutors: 1
 
         matrix-settings: |
           jenkins:
@@ -91,62 +92,51 @@ jenkins:
         jobs-settings: |
           jobs:
             - script: >
-                multibranchPipelineJob('testrepo1') {
-                  displayName "Test Repo 1"
-                  description "Test Repo 1"
-                  branchSources {
-                    branchSource {
-                      source {
-                        github {
-                          //credentialsId("github-access-token")
-                          configuredByUrl(true)
-                          repositoryUrl('https://github.com/garethjevans/test-repo1')
-                          repoOwner('garethjevans')
-                          repository('test-repo1')
-                          traits {
-                            gitHubBranchDiscovery {
-                              strategyId(2) // 2-only branches that are pull requests
-                            }
-                            pruneStaleBranchTrait()
-                            gitHubTagDiscovery()
-                          }
-                        }
-                        buildStrategies {
-                          buildAnyBranches {
-                            strategies {
-                              buildAllBranches {
-                                strategies {
-                                  buildNamedBranches {
-                                    filters {
-                                      exact {
-                                        name("main")
-                                        caseSensitive(true)
-                                      }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                          buildAnyBranches {
-                            strategies {
-                              buildAllBranches {
-                                strategies {
-                                  buildTags {
-                                    atLeastDays '-1'
-                                    atMostDays '3'
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
+                def configuration = [
+                  [
+                    name        : "Core",
+                    repositories: "test-repo*",
+                    excludes    : ""
+                  ]
+                ]
+
+                configuration.each { jobConfig ->
+                  def config = [
+                    displayName: jobConfig.name,
+                    owner      : "garethjevans",
+                    excludes   : ""
+                  ] << jobConfig
+
+                  organizationFolder(config.name) {
+                    displayName(config.displayName)
+                    organizations {
+                      github {
+                        repoOwner(config.owner)
+                        apiUri("https://api.github.com")
+                        //credentialsId("github-access-token")
                       }
                     }
-                  }
-                  factory {
-                    workflowBranchProjectFactory {
-                      scriptPath('Jenkinsfile')
+                    projectFactories {
+                      workflowMultiBranchProjectFactory {
+                        scriptPath("Jenkinsfile")
+                      }
+                    }
+                    configure { node ->
+                      def traits = node / navigators / 'org.jenkinsci.plugins.github__branch__source.GitHubSCMNavigator' / traits
+                      traits << 'jenkins.scm.impl.trait.WildcardSCMSourceFilterTrait' {
+                        includes(config.repositories)
+                        excludes(config.excludes)
+                      }
+                      traits << 'org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait' {
+                        strategyId(1)
+                      }
+                      traits << 'org.jenkinsci.plugins.github__branch__source.OriginPullRequestDiscoveryTrait' {
+                        strategyId(1)
+                      }
+                      traits << 'org.jenkinsci.plugins.github__branch__source.ForkPullRequestDiscoveryTrait' {
+                        strategyId(1)
+                        trust(class: 'org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$TrustPermission')
+                      }
                     }
                   }
                 }
@@ -315,4 +305,3 @@ jenkins:
     ingress:
       enabled: true
       apiVersion: "networking.k8s.io/v1beta1"
-
