@@ -2,6 +2,8 @@
 # Default values for cijenkinsio.
 #
 jenkins:
+  rbac:
+    readSecrets: true
   persistence:
     enabled: true
     size: 100Gi
@@ -137,7 +139,7 @@ jenkins:
                       }
                       traits << 'org.jenkinsci.plugins.github__branch__source.ForkPullRequestDiscoveryTrait' {
                         strategyId(1)
-                        trust(class: "org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$$${config.trust}")
+                        trust(class: "org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait\$${config.trust}")
                       }
                     }
                   }
@@ -262,6 +264,7 @@ jenkins:
       - junit
       - kubernetes
       - kubernetes-credentials
+      - kubernetes-credentials-provider
       - ldap
       - lockable-resources
       - pipeline-utility-steps
