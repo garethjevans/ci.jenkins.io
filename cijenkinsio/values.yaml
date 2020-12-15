@@ -139,7 +139,7 @@ jenkins:
                       }
                       traits << 'org.jenkinsci.plugins.github__branch__source.ForkPullRequestDiscoveryTrait' {
                         strategyId(1)
-                        trust(class: "org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait\$${config.trust}")
+                        trust(class: 'org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$' + config.trust)
                       }
                     }
                   }
@@ -155,7 +155,7 @@ jenkins:
                     modernSCM:
                       scm:
                         git:
-                          #id: "github-access-token"
+                          id: "github-access-token"
                           remote: "https://github.com/jenkins-infra/pipeline-library.git"
         location: |
           unclassified:
@@ -305,7 +305,6 @@ jenkins:
       - workflow-scm-step
       - workflow-step-api
       - workflow-support
-
 
     ingress:
       enabled: true
