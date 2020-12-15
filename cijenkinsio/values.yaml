@@ -132,14 +132,14 @@ jenkins:
                         excludes(config.excludes)
                       }
                       traits << 'org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait' {
-                        strategyId(1)
+                        strategyId(2)
                       }
                       traits << 'org.jenkinsci.plugins.github__branch__source.OriginPullRequestDiscoveryTrait' {
                         strategyId(1)
                       }
                       traits << 'org.jenkinsci.plugins.github__branch__source.ForkPullRequestDiscoveryTrait' {
                         strategyId(1)
-                        trust(class: "org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait\$${config.trust}")
+                        trust(class: 'org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$' + config.trust)
                       }
                     }
                   }
@@ -155,7 +155,7 @@ jenkins:
                     modernSCM:
                       scm:
                         git:
-                          #id: "github-access-token"
+                          id: "github-access-token"
                           remote: "https://github.com/jenkins-infra/pipeline-library.git"
         location: |
           unclassified:
@@ -272,6 +272,7 @@ jenkins:
       - matrix-auth
       - matrix-project
       - pipeline-build-step
+      - pipeline-github
       - pipeline-graph-analysis
       - pipeline-input-step
       - pipeline-milestone-step
@@ -306,7 +307,6 @@ jenkins:
       - workflow-step-api
       - workflow-support
 
-
     ingress:
       enabled: true
 
@@ -318,4 +318,4 @@ kubernetes-external-secrets:
 github:
   token:
     project: gevans-test
-    username: garethjevans
+    username: user
