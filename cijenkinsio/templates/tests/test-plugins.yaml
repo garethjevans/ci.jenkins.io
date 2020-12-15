@@ -1,0 +1,52 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ include "cijenkinsio.fullname" . }}-test-plugins-script"
+data:
+  test.sh: |
+   #!/bin/bash
+   set -e
+   yum install -yq java
+   curl -q 'http://{{ include "cijenkinsio.fullname" . }}:{{ .Values.jenkins.controller.servicePort }}/jnlpJars/jenkins-cli.jar' -o jenkins-cli.jar
+   TO_MATCH=$(echo "{{ .Values.jenkins.controller.installPlugins }}" | tr -d '[' | tr -d ']' )
+   OUTPUT=$(java -jar jenkins-cli.jar -s http://{{ include "cijenkinsio.fullname" . }}:{{ .Values.jenkins.controller.servicePort }} -auth $JENKINS_USER:$JENKINS_PASSWORD list-plugins | awk '{ print $1 }' | tr '\n' ' ' )
+   for plugin in $TO_MATCH
+   do
+     found=$(echo "$OUTPUT" | grep -c "$plugin")
+     if [ $found -lt 1 ]; then
+       echo "$plugin not found!"
+       exit 1
+     fi
+   done
+   echo "All plugins found :-)"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "cijenkinsio.fullname" . }}-test-plugins"
+  labels:
+    {{- include "cijenkinsio.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: test-plugins
+      image: centos:8
+      env:
+        - name: JENKINS_USER
+          value: "admin"
+        - name: JENKINS_PASSWORD
+          value: "p4ssw0rd"
+      command:
+        - /scripts/test.sh
+      volumeMounts:
+      - name: scripts
+        mountPath: "/scripts"
+        readOnly: true
+  volumes:
+    - name: scripts
+      configMap:
+        name: {{ include "cijenkinsio.fullname" . }}-test-plugins-script
+        defaultMode: 0777  
+  restartPolicy: Never
