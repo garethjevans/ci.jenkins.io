@@ -117,7 +117,7 @@ jenkins:
                       github {
                         repoOwner(config.owner)
                         apiUri("https://api.github.com")
-                        //credentialsId("github-access-token")
+                        credentialsId("github-access-token")
                       }
                     }
                     projectFactories {
@@ -309,3 +309,8 @@ jenkins:
 
     ingress:
       enabled: true
+
+kubernetes-external-secrets:
+  serviceAccount:
+    annotations:
+      iam.gke.io/gcp-service-account: google-secrets-sa@gevans-test.iam.gserviceaccount.com
