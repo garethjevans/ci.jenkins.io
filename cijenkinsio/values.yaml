@@ -96,7 +96,8 @@ jenkins:
                   [
                     name        : "Core",
                     repositories: "test-repo*",
-                    excludes    : ""
+                    excludes    : "",
+                    trust       : "TrustNobody"
                   ]
                 ]
 
@@ -104,7 +105,8 @@ jenkins:
                   def config = [
                     displayName: jobConfig.name,
                     owner      : "garethjevans",
-                    excludes   : ""
+                    excludes   : "",
+                    trust      : "TrustPermission"
                   ] << jobConfig
 
                   organizationFolder(config.name) {
@@ -135,7 +137,7 @@ jenkins:
                       }
                       traits << 'org.jenkinsci.plugins.github__branch__source.ForkPullRequestDiscoveryTrait' {
                         strategyId(1)
-                        trust(class: 'org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$TrustPermission')
+                        trust(class: "org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$$${config.trust}")
                       }
                     }
                   }
@@ -304,4 +306,3 @@ jenkins:
 
     ingress:
       enabled: true
-      apiVersion: "networking.k8s.io/v1beta1"
