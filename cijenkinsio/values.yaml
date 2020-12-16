@@ -106,7 +106,7 @@ jenkins:
                 configuration.each { jobConfig ->
                   def config = [
                     displayName: jobConfig.name,
-                    owner      : "garethjevans",
+                    owner      : "garethjevans-test",
                     excludes   : "",
                     trust      : "TrustPermission"
                   ] << jobConfig
@@ -318,4 +318,4 @@ kubernetes-external-secrets:
 github:
   token:
     project: gevans-test
-    username: user
+    username: jenkinsuser
