@@ -7,7 +7,6 @@ data:
   test.sh: |
    #!/bin/bash
    set -e
-   yum install -yq java
    curl -q 'http://{{ include "cijenkinsio.fullname" . }}:{{ .Values.jenkins.controller.servicePort }}/jnlpJars/jenkins-cli.jar' -o jenkins-cli.jar
    TO_MATCH=$(echo "{{ .Values.jenkins.controller.installPlugins }}" | tr -d '[' | tr -d ']' )
    OUTPUT=$(java -jar jenkins-cli.jar -s http://{{ include "cijenkinsio.fullname" . }}:{{ .Values.jenkins.controller.servicePort }} -auth $JENKINS_USER:$JENKINS_PASSWORD list-plugins | awk '{ print $1 }' | tr '\n' ' ' )
@@ -32,7 +31,7 @@ metadata:
 spec:
   containers:
     - name: test-plugins
-      image: centos:8
+      image: adoptopenjdk:11-jdk-hotspot
       env:
         - name: JENKINS_USER
           value: "admin"
