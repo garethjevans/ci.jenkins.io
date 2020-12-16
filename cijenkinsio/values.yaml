@@ -139,6 +139,10 @@ jenkins:
                         includes(config.repositories)
                         excludes(config.excludes)
                       }
+                      traits << 'jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait' {
+                        includes('main')
+                        excludes()
+                      }
                       traits << 'org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait' {
                         strategyId(1)
                       }
@@ -149,6 +153,23 @@ jenkins:
                         strategyId(1)
                         trust(class: 'org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$' + config.trust)
                       }
+                    }
+                  }
+                }
+            - script: >
+                multibranchPipelineJob('ci.jenkins.io') {
+                  displayName "ci.jenkins.io"
+                  branchSources {
+                    github {
+                      id('2020120401')
+                      scanCredentialsId('github-access-token')
+                      repoOwner('garethjevans')
+                      repository('ci.jenkins.io')
+                    }
+                  }
+                  factory {
+                    workflowBranchProjectFactory {
+                      scriptPath('Jenkinsfile')
                     }
                   }
                 }
