@@ -2,8 +2,24 @@
 
 A playground for playing with Jenkins Helm & JCasC
 
-## make build
+## build
 
-## make deploy
+```sh
+$ make build
+```
 
-## make test
+## deploy
+
+```sh
+$ make deploy
+```
+
+## test
+The following tests are executed:
+- test-connection
+- test-login
+- test-plugins
+
+```sh
+$ make test
+```
