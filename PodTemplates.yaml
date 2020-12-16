@@ -1,0 +1,50 @@
+---
+apiVersion: "v1"
+kind: "Pod"
+metadata:
+  labels:
+    jenkins: "agent"
+    job: "helmfile"
+spec:
+  containers:
+    - args:
+        - "99d"
+      command:
+        - "sleep"
+      env:
+        - name: "HOME"
+          value: "/home/helm"
+      image: "jenkinsciinfra/helmfile:025921"
+      imagePullPolicy: "IfNotPresent"
+      name: "helmfile"
+      resources:
+        limits:
+          memory: "512Mi"
+          cpu: "400m"
+        requests:
+          memory: "512Mi"
+          cpu: "400m"
+      securityContext:
+        privileged: false
+      tty: true
+    - args:
+        - "99d"
+      command:
+        - "sleep"
+      env:
+        - name: "HOME"
+          value: "/home/helm"
+      image: "cytopia/yamllint:1.22"
+      imagePullPolicy: "Always"
+      name: "yamllint"
+      resources:
+        limits:
+          memory: "512Mi"
+          cpu: "400m"
+        requests:
+          memory: "512Mi"
+          cpu: "400m"
+      securityContext:
+        privileged: false
+      tty: true
+  restartPolicy: "Never"

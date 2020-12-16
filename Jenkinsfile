@@ -19,6 +19,9 @@ pipeline {
         container('helmfile') {
           sh 'helm init'
         }
+        container('yamllint') {
+          sh 'yamllint --config-file yamllint.config cijenkinsio/values.yaml'
+        }
       }
     }
 //    stage('Plan') {
