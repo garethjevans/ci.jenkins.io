@@ -15,14 +15,20 @@ jenkins:
       configScripts:
         no-executors: |
           jenkins:
-            numExecutors: 1
+            numExecutors: 0
 
         matrix-settings: |
           jenkins:
             authorizationStrategy:
-              loggedInUsersCanDoAnything:
-                allowAnonymousRead: false
-
+              globalMatrix:
+                permissions:
+                  - "Overall/SystemRead:authenticated"
+                  - "Overall/Read:authenticated"
+                  - "Agent/ExtendedRead:authenticated"
+                  - "Job/ExtendedRead:authenticated"
+                  - "Overall/Read:anonymous"
+                  - "Job/Read:anonymous"
+                  - "View/Read:anonymous"
         security-realm: |
           jenkins:
             securityRealm:
@@ -99,7 +105,7 @@ jenkins:
                     name        : "Core",
                     repositories: "test-repo*",
                     excludes    : "",
-                    trust       : "TrustNobody"
+                    trust       : "TrustContributors"
                   ]
                 ]
 
@@ -132,7 +138,7 @@ jenkins:
                         excludes(config.excludes)
                       }
                       traits << 'org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait' {
-                        strategyId(2)
+                        strategyId(1)
                       }
                       traits << 'org.jenkinsci.plugins.github__branch__source.OriginPullRequestDiscoveryTrait' {
                         strategyId(1)
@@ -172,7 +178,7 @@ jenkins:
                   jenkinsUrl: "http://cijenkinsio:8080"
                   maxRequestsPerHostStr: "300"
                   name: "kubernetes"
-                  namespace: "cijenkinsio"
+                  namespace: "jenkins"
                   podRetention: "Never"
                   serverUrl: "https://kubernetes.default"
                   podLabels:
@@ -186,17 +192,6 @@ jenkins:
                       containers:
                         - name: jnlp
                           image: "jenkins/inbound-agent:latest-jdk11"
-                          resourceLimitCpu: "500m"
-                          resourceLimitMemory: "512Mi"
-                          resourceRequestCpu: "500m"
-                          resourceRequestMemory: "512Mi"
-                          args: "^${computer.jnlpmac} ^${computer.name}"
-                          alwaysPullImage: true
-                    - name: jnlp-windows
-                      nodeSelector: "kubernetes.io/os=windows"
-                      containers:
-                        - name: jnlp
-                          image: "jenkins4eval/jnlp-agent:latest-windows"
                           resourceLimitCpu: "500m"
                           resourceLimitMemory: "512Mi"
                           resourceRequestCpu: "500m"
