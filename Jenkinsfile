@@ -17,7 +17,7 @@ pipeline {
     stage('Validate') {
       steps {
         container('helmfile') {
-          sh 'helm init'
+          sh 'helm lint cijenkinsio
         }
         container('yamllint') {
           sh 'yamllint --config-file yamllint.config cijenkinsio/values.yaml'
