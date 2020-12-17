@@ -153,6 +153,9 @@ jenkins:
                         strategyId(1)
                         trust(class: 'org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$' + config.trust)
                       }
+                      traits << 'org.jenkinsci.plugins.github.label.filter.PullRequestLabelsBlackListFilterTrait' {
+                        labels('on-hold')
+                      }
                     }
                   }
                 }
@@ -187,6 +190,9 @@ jenkins:
                     traits << 'org.jenkinsci.plugins.github__branch__source.ForkPullRequestDiscoveryTrait' {
                       strategyId(1)
                       trust(class: 'org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$TrustContributors')
+                    }
+                    traits << 'org.jenkinsci.plugins.github.label.filter.PullRequestLabelsBlackListFilterTrait' {
+                      labels('on-hold')
                     }
                   }
                 }
@@ -291,6 +297,7 @@ jenkins:
       - github-api
       - github-branch-source
       - github-checks
+      - github-label-filter
       - groovy  
       - inline-pipeline
       - javadoc  
