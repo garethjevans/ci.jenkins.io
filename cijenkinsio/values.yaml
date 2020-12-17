@@ -252,7 +252,7 @@ jenkins:
                             value: "windows"
                             effect: "NoSchedule"
 
-    overwritePlugins: true  
+    overwritePlugins: true
     installPlugins:
       - ansicolor
       - antisamy-markup-formatter
@@ -283,11 +283,11 @@ jenkins:
       - branch-api
       - build-name-setter
       - config-file-provider
-      - cloud-stats  
+      - cloud-stats
       - configuration-as-code
       - credentials
       - credentials-binding
-        #      - datadog
+      # - datadog
       - ec2
       - embeddable-build-status
       - extended-read-permission
@@ -298,9 +298,9 @@ jenkins:
       - github-branch-source
       - github-checks
       - github-label-filter
-      - groovy  
+      - groovy
       - inline-pipeline
-      - javadoc  
+      - javadoc
       - jira
       - job-dsl
       - junit
@@ -310,7 +310,7 @@ jenkins:
       - ldap
       - lockable-resources
       - pipeline-utility-steps
-      - metrics  
+      - metrics
       - matrix-auth
       - matrix-project
       - pipeline-build-step
@@ -332,7 +332,7 @@ jenkins:
       - ssh-agent
       - ssh-credentials
       - support-core
-      - timestamper  
+      - timestamper
       - token-macro
       - toolenv
       - variant
