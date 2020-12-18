@@ -27,7 +27,7 @@ pipeline {
           sh 'helm template cijenkinsio --output-dir generated'
         }
         container('jcasc-validator') {
-          sh 'jcasc-validator validate --template-location generated/cijenkinsio/charts/jenkins/templates/jcasc-config.yaml --schema-location resources/schema.json'
+          sh 'jcasc-validator validate --soft-fail --template-location generated/cijenkinsio/charts/jenkins/templates/jcasc-config.yaml --schema-location resources/schema.json'
         }
       }
     }
