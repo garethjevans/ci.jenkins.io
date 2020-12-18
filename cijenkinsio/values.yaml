@@ -139,10 +139,6 @@ jenkins:
                         includes(config.repositories)
                         excludes(config.excludes)
                       }
-                      traits << 'jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait' {
-                        includes('main')
-                        excludes()
-                      }
                       traits << 'org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait' {
                         strategyId(1)
                       }
@@ -152,6 +148,10 @@ jenkins:
                       traits << 'org.jenkinsci.plugins.github__branch__source.ForkPullRequestDiscoveryTrait' {
                         strategyId(1)
                         trust(class: 'org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$' + config.trust)
+                      }
+                      traits << 'jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait' {
+                        includes('main PR-*')
+                        excludes()
                       }
                       traits << 'org.jenkinsci.plugins.github.label.filter.PullRequestLabelsBlackListFilterTrait' {
                         labels('on-hold')
@@ -177,10 +177,6 @@ jenkins:
                   }
                   configure { node ->
                     def traits = node / 'sources' / 'data' / 'jenkins.branch.BranchSource' / 'source' / 'traits'
-                    traits << 'jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait' {
-                      includes('main')
-                      excludes()
-                    }
                     traits << 'org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait' {
                       strategyId(1)
                     }
@@ -190,6 +186,10 @@ jenkins:
                     traits << 'org.jenkinsci.plugins.github__branch__source.ForkPullRequestDiscoveryTrait' {
                       strategyId(1)
                       trust(class: 'org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$TrustContributors')
+                    }
+                    traits << 'jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait' {
+                      includes('main PR-*')
+                      excludes()
                     }
                     traits << 'org.jenkinsci.plugins.github.label.filter.PullRequestLabelsBlackListFilterTrait' {
                       labels('on-hold')
