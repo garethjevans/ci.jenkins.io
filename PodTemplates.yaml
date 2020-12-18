@@ -33,4 +33,14 @@ spec:
       securityContext:
         privileged: false
       tty: true
+    - args:
+        - "99d"
+      command:
+        - "sleep"
+      image: "garethjevans/jcasc-validator:0.0.2"
+      imagePullPolicy: "Always"
+      name: "jcasc-validator"
+      securityContext:
+        privileged: false
+      tty: true
   restartPolicy: "Never"
