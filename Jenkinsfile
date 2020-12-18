@@ -23,6 +23,7 @@ pipeline {
           sh 'yamllint --config-file yamllint.config cijenkinsio/values.yaml'
         }
         container('helmfile') {
+          sh 'helm dependency build cijenkinsio'
           sh 'helm template cijenkinsio --output-dir generated'
         }
         container('jcasc-validator') {
