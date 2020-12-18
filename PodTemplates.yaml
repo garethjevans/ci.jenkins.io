@@ -37,7 +37,7 @@ spec:
         - "99d"
       command:
         - "sleep"
-      image: "garethjevans/jcasc-validator:0.0.2"
+      image: "garethjevans/jcasc-validator:0.0.3"
       imagePullPolicy: "Always"
       name: "jcasc-validator"
       securityContext:
