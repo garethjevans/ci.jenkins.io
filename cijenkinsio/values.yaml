@@ -139,10 +139,10 @@ jenkins:
                         includes(config.repositories)
                         excludes(config.excludes)
                       }
-                      traits << 'jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait' {
-                        includes('main')
-                        excludes()
-                      }
+                      //traits << 'jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait' {
+                      //  includes('main')
+                      //  excludes()
+                      //}
                       traits << 'org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait' {
                         strategyId(1)
                       }
@@ -175,12 +175,18 @@ jenkins:
                       scriptPath('Jenkinsfile')
                     }
                   }
+                  // don't keep build jobs for deleted branches
+                  orphanedItemStrategy {
+                    discardOldItems {
+                      numToKeep(-1)
+                    }
+                  }
                   configure { node ->
                     def traits = node / 'sources' / 'data' / 'jenkins.branch.BranchSource' / 'source' / 'traits'
-                    traits << 'jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait' {
-                      includes('main')
-                      excludes()
-                    }
+                    //traits << 'jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait' {
+                    //  includes('main')
+                    //  excludes()
+                    //}
                     traits << 'org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait' {
                       strategyId(1)
                     }
