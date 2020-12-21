@@ -133,6 +133,12 @@ jenkins:
                         scriptPath("Jenkinsfile")
                       }
                     }
+                    // don't keep build jobs for deleted branches
+                    orphanedItemStrategy {
+                      discardOldItems {
+                        numToKeep(-1)
+                      }
+                    }
                     configure { node ->
                       def traits = node / navigators / 'org.jenkinsci.plugins.github__branch__source.GitHubSCMNavigator' / traits
                       traits << 'jenkins.scm.impl.trait.WildcardSCMSourceFilterTrait' {
@@ -173,6 +179,12 @@ jenkins:
                   factory {
                     workflowBranchProjectFactory {
                       scriptPath('Jenkinsfile')
+                    }
+                  }
+                  // don't keep build jobs for deleted branches
+                  orphanedItemStrategy {
+                    discardOldItems {
+                      numToKeep(-1)
                     }
                   }
                   configure { node ->
