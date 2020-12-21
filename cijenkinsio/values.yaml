@@ -156,7 +156,7 @@ jenkins:
                         trust(class: 'org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$' + config.trust)
                       }
                       traits << 'jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait' {
-                        includes('main PR-*')
+                        includes('main master PR-*')
                         excludes()
                       }
                       traits << 'org.jenkinsci.plugins.github.label.filter.PullRequestLabelsBlackListFilterTrait' {
@@ -200,7 +200,7 @@ jenkins:
                       trust(class: 'org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$TrustContributors')
                     }
                     traits << 'jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait' {
-                      includes('main PR-*')
+                      includes('main master PR-*')
                       excludes()
                     }
                     traits << 'org.jenkinsci.plugins.github.label.filter.PullRequestLabelsBlackListFilterTrait' {
