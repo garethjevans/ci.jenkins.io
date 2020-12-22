@@ -1,0 +1,362 @@
+---
+rbac:
+  readSecrets: true
+persistence:
+  enabled: true
+  size: 100Gi
+controller:
+  tag: "2.263.1-lts"
+  JCasC:
+    enabled: true
+    defaultConfig: false
+    configScripts:
+      no-executors: |
+        jenkins:
+          numExecutors: 0
+
+      matrix-settings: |
+        jenkins:
+          authorizationStrategy:
+            globalMatrix:
+              permissions:
+                - "Overall/Administer:admin"
+                - "Overall/SystemRead:authenticated"
+                - "Overall/Read:authenticated"
+                - "Agent/ExtendedRead:authenticated"
+                - "Job/ExtendedRead:authenticated"
+                - "Overall/Read:anonymous"
+                - "Job/Read:anonymous"
+                - "View/Read:anonymous"
+
+      security-realm: |
+        jenkins:
+          securityRealm:
+            local:
+              allowsSignup: false
+              users:
+                - id: "admin"
+                  password: "p4ssw0rd"
+
+      misc-jenkins: |
+        jenkins:
+          remotingSecurity:
+            enabled: true
+          slaveAgentPort: 50000
+
+      system-message: |
+        jenkins:
+          systemMessage: |
+            <div>
+              <h1>About ci.jenkins.io</h1>
+              <p>This instance hosts several <a href="https://plugins.jenkins.io/github-branch-source">GitHub Organization folders</a> organized by subject area.</p>
+              <p>To add continuous integration and PR builds for a Jenkins plugin in the <code>jenkinsci</code> organization,
+              just add a <a href="https://jenkins.io/doc/book/pipeline/jenkinsfile/"><code>Jenkinsfile</code></a> to your repository.
+              You'll likely only need one line:</p>
+              <pre>    buildPlugin()</pre>
+              <p>Learn more:</p>
+              <ul>
+                <li><a href="https://jenkins.io/projects/infrastructure/#jenkins">About the Jenkins infrastructure project</a></li>
+                <li><a href="https://github.com/jenkins-infra/documentation/blob/master/ci.adoc#jenkins-on-jenkins">Infrastructure documentation: ci.jenkins.io</a></li>
+                <li><a href="https://github.com/jenkins-infra/pipeline-library#pipeline-global-library">Infrastructure documentation: Pipeline library</a></li>
+                <li><a href="https://github.com/jenkins-infra/charts/blob/master/config/cijenkinsio/jenkins.yaml">configuration-as-code for ci.jenkins.io</a></li>
+              </ul>
+            </div>
+
+      markup-formatter: |
+        jenkins:
+          markupFormatter:
+            rawHtml:
+              disableSyntaxHighlighting: false
+
+      crumb-issuer: |
+        jenkins:
+          crumbIssuer:
+            standard:
+              excludeClientIPFromCrumb: true
+
+      misc-security: |
+        security:
+          apiToken:
+            creationOfLegacyTokenEnabled: false
+            tokenGenerationOnCreationEnabled: false
+            usageStatisticsEnabled: true
+
+      misc-unclassified: |
+        unclassified:
+          appInsightsGlobalConfig:
+            appInsightsEnabled: false
+          gitSCM:
+            createAccountBasedOnEmail: false
+            globalConfigEmail: "oscar@example.com"
+            globalConfigName: "oscar"
+          pipeline-model-docker:
+            dockerLabel: "docker"
+          pollSCM:
+            pollingThreadCount: 10
+          timestamper:
+            allPipelines: true
+
+      jobs-settings: |
+        jobs:
+          - script: >
+              def configuration = [
+                [
+                  name        : "Core",
+                  repositories: "test-repo*",
+                  excludes    : "",
+                  trust       : "TrustContributors"
+                ]
+              ]
+
+              configuration.each { jobConfig ->
+                def config = [
+                  displayName: jobConfig.name,
+                  owner      : "garethjevans-test",
+                  excludes   : "",
+                  trust      : "TrustPermission"
+                ] << jobConfig
+
+                organizationFolder(config.name) {
+                  displayName(config.displayName)
+                  organizations {
+                    github {
+                      repoOwner(config.owner)
+                      apiUri("https://api.github.com")
+                      credentialsId("github-access-token")
+                    }
+                  }
+                  projectFactories {
+                    workflowMultiBranchProjectFactory {
+                      scriptPath("Jenkinsfile")
+                    }
+                  }
+                  // don't keep build jobs for deleted branches
+                  orphanedItemStrategy {
+                    discardOldItems {
+                      numToKeep(-1)
+                    }
+                  }
+                  configure { node ->
+                    def traits = node / navigators / 'org.jenkinsci.plugins.github__branch__source.GitHubSCMNavigator' / traits
+                    traits << 'jenkins.scm.impl.trait.WildcardSCMSourceFilterTrait' {
+                      includes(config.repositories)
+                      excludes(config.excludes)
+                    }
+                    traits << 'org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait' {
+                      strategyId(1)
+                    }
+                    traits << 'org.jenkinsci.plugins.github__branch__source.OriginPullRequestDiscoveryTrait' {
+                      strategyId(1)
+                    }
+                    traits << 'org.jenkinsci.plugins.github__branch__source.ForkPullRequestDiscoveryTrait' {
+                      strategyId(1)
+                      trust(class: 'org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$' + config.trust)
+                    }
+                    traits << 'jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait' {
+                      includes('main master PR-*')
+                      excludes()
+                    }
+                    traits << 'org.jenkinsci.plugins.github.label.filter.PullRequestLabelsBlackListFilterTrait' {
+                      labels('on-hold')
+                    }
+                  }
+                }
+              }
+          - script: >
+              multibranchPipelineJob('ci.jenkins.io') {
+                displayName "ci.jenkins.io"
+                branchSources {
+                  github {
+                    id('2020120401')
+                    scanCredentialsId('github-access-token')
+                    repoOwner('garethjevans')
+                    repository('ci.jenkins.io')
+                  }
+                }
+                factory {
+                  workflowBranchProjectFactory {
+                    scriptPath('Jenkinsfile')
+                  }
+                }
+                // don't keep build jobs for deleted branches
+                orphanedItemStrategy {
+                  discardOldItems {
+                    numToKeep(-1)
+                  }
+                }
+                configure { node ->
+                  def traits = node / 'sources' / 'data' / 'jenkins.branch.BranchSource' / 'source' / 'traits'
+                  traits << 'org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait' {
+                    strategyId(1)
+                  }
+                  traits << 'org.jenkinsci.plugins.github__branch__source.OriginPullRequestDiscoveryTrait' {
+                    strategyId(1)
+                  }
+                  traits << 'org.jenkinsci.plugins.github__branch__source.ForkPullRequestDiscoveryTrait' {
+                    strategyId(1)
+                    trust(class: 'org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$TrustContributors')
+                  }
+                  traits << 'jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait' {
+                    includes('main master PR-*')
+                    excludes()
+                  }
+                  traits << 'org.jenkinsci.plugins.github.label.filter.PullRequestLabelsBlackListFilterTrait' {
+                    labels('on-hold')
+                  }
+                }
+              }
+      pipeline-library: |
+        unclassified:
+          globalLibraries:
+            libraries:
+              - defaultVersion: "master"
+                implicit: true
+                name: "pipeline-library"
+                retriever:
+                  modernSCM:
+                    scm:
+                      git:
+                        id: "github-access-token"
+                        remote: "https://github.com/jenkins-infra/pipeline-library.git"
+      location: |
+        unclassified:
+          location:
+            adminAddress: "nobody@jenkins.io"
+            url: "https://ci.jenkins.io"
+
+      k8s-settings: |
+        jenkins:
+          clouds:
+            - kubernetes:
+                containerCapStr: "100"
+                jenkinsTunnel: "cijenkinsio-agent:50000"
+                jenkinsUrl: "http://cijenkinsio:8080"
+                maxRequestsPerHostStr: "300"
+                name: "kubernetes"
+                namespace: "jenkins"
+                podRetention: "Never"
+                serverUrl: "https://kubernetes.default"
+                podLabels:
+                  # Required to be jenkins/<helm-release>-jenkins-slave as definede here
+                  # https://github.com/helm/charts/blob/ef0d749132ecfa61b2ea47ccacafeaf5cf1d3d77/stable/jenkins/templates/jenkins-master-networkpolicy.yaml#L27
+                  - key: "jenkins/cijenkinsio-agent"
+                    value: "true"
+                templates:
+                  - name: jnlp-linux
+                    nodeSelector: "kubernetes.io/os=linux"
+                    containers:
+                      - name: jnlp
+                        image: "jenkins/inbound-agent:latest-jdk11"
+                        resourceLimitCpu: "500m"
+                        resourceLimitMemory: "512Mi"
+                        resourceRequestCpu: "500m"
+                        resourceRequestMemory: "512Mi"
+                        args: "^${computer.jnlpmac} ^${computer.name}"
+                        alwaysPullImage: true
+                    yaml: |-
+                      spec:
+                        tolerations:
+                        - key: "os"
+                          operator: "Equal"
+                          value: "windows"
+                          effect: "NoSchedule"
+
+  overwritePlugins: true
+  installPlugins:
+    - ansicolor
+    - antisamy-markup-formatter
+    - authentication-tokens
+    - azure-container-agents
+    - azure-vm-agents
+    - basic-branch-build-strategies
+    - blueocean
+    - blueocean-autofavorite
+    - blueocean-commons
+    - blueocean-config
+    - blueocean-core-js
+    - blueocean-dashboard
+    - blueocean-display-url
+    - blueocean-events
+    - blueocean-git-pipeline
+    - blueocean-github-pipeline
+    - blueocean-i18n
+    - blueocean-jira
+    - blueocean-jwt
+    - blueocean-personalization
+    - blueocean-pipeline-api-impl
+    - blueocean-pipeline-editor
+    - blueocean-pipeline-scm-api
+    - blueocean-rest
+    - blueocean-rest-impl
+    - blueocean-web
+    - branch-api
+    - build-name-setter
+    - config-file-provider
+    - cloud-stats
+    - configuration-as-code
+    - credentials
+    - credentials-binding
+    # - datadog
+    - ec2
+    - embeddable-build-status
+    - extended-read-permission
+    - git
+    - git-client
+    - github
+    - github-api
+    - github-branch-source
+    - github-checks
+    - github-label-filter
+    - groovy
+    - inline-pipeline
+    - javadoc
+    - jira
+    - job-dsl
+    - junit
+    - kubernetes
+    - kubernetes-credentials
+    - kubernetes-credentials-provider
+    - ldap
+    - lockable-resources
+    - pipeline-utility-steps
+    - metrics
+    - matrix-auth
+    - matrix-project
+    - pipeline-build-step
+    - pipeline-github
+    - pipeline-graph-analysis
+    - pipeline-input-step
+    - pipeline-milestone-step
+    - pipeline-model-api
+    - pipeline-model-definition
+    - pipeline-model-extensions
+    - pipeline-rest-api
+    - pipeline-stage-step
+    - pipeline-stage-tags-metadata
+    - pipeline-stage-view
+    - plain-credentials
+    - prometheus
+    - scm-api
+    - script-security
+    - ssh-agent
+    - ssh-credentials
+    - support-core
+    - timestamper
+    - token-macro
+    - toolenv
+    - variant
+    - warnings-ng
+    - workflow-aggregator
+    - workflow-api
+    - workflow-basic-steps
+    - workflow-cps
+    - workflow-cps-global-lib
+    - workflow-durable-task-step
+    - workflow-job
+    - workflow-multibranch
+    - workflow-scm-step
+    - workflow-step-api
+    - workflow-support
+
+  ingress:
+    enabled: true
