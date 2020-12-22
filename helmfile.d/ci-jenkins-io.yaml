@@ -11,7 +11,7 @@ repositories:
 releases:
   - name: jenkins
     chart: jenkins/jenkins
-    version: 3.0.10
+    version: 3.0.11
     namespace: jenkins
     values:
       - "../config/default/ci-infra-io.yaml"
