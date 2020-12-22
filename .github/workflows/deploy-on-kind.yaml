@@ -13,8 +13,8 @@ jobs:
       - name: Setup helmfile
         uses: mamezou-tech/setup-helmfile@v0.7.0
 
-      - name: Run Lint
-        run: helmfile lint
+      #      - name: Run Lint
+      #        run: helmfile lint
 
       - name: Create Kind Cluster
         uses: helm/kind-action@v1.1.0
