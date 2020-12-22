@@ -20,4 +20,4 @@ delete:
 		helmfile destroy
 
 lint:
-		yamllint --config-file yamllint.config helmfile.d config
+		yamllint --config-file yamllint.config helmfile.d config .github

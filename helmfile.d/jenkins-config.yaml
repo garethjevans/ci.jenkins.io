@@ -11,8 +11,8 @@ releases:
     namespace: jenkins
     values:
       - "../config/default/jenkins-config.yaml"
-      #    secrets:
-      #      - "../secrets/config/jenkins-infra/jenkins.yaml"
     set:
       - name: namespace
         value: jenkins
+    needs:
+      - kubernetes-external-secrets
