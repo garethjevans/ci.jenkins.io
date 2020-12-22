@@ -14,5 +14,3 @@ releases:
     set:
       - name: namespace
         value: jenkins
-    needs:
-      - kubernetes-external-secrets
