@@ -1,23 +1,20 @@
-CHART := cijenkinsio
+CHART := jenkins
 
 build:
-		rm $(CHART)/Chart.lock
-		helm dependency build $(CHART)
-		helm lint $(CHART)
+		helmfile sync
 
 diff:
-		helm diff upgrade --reset-values --show-secrets --allow-unreleased $(CHART) $(CHART)
+		helmfile diff
 
 deploy: build
-		helm upgrade --install $(CHART) $(CHART)
+		helmfile apply
 
 test:
-		helm test $(CHART)
-		kubectl logs $(CHART)-test-connection
-		kubectl logs $(CHART)-test-login
-		kubectl logs $(CHART)-test-plugins
+		helmfile test
 		kubectl get pods | grep Completed | awk '{print $$1}' | xargs kubectl delete pod
 
 delete:
-		helm uninstall $(CHART)
+		helmfile destroy
 
+lint:
+		yamllint --config-file yamllint.config helmfile.d config .github

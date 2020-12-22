@@ -7,7 +7,7 @@ spec:
   backendType: gcpSecretsManager
   projectId: {{ .Values.github.token.project }}
   data:
-    - key: {{ include "cijenkinsio.name" . }}-token
+    - key: {{ .Chart.Name }}-token
       name: password
       version: latest
   template:

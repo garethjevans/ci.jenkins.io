@@ -1,0 +1,16 @@
+---
+helmDefaults:
+  atomic: true
+  force: false
+  timeout: 600
+  wait: true
+
+releases:
+  - name: jenkins-config
+    chart: ../charts/jenkins-config
+    namespace: jenkins
+    values:
+      - "../config/default/jenkins-config.yaml"
+    set:
+      - name: namespace
+        value: jenkins

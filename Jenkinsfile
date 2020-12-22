@@ -16,11 +16,11 @@ pipeline {
   stages {
     stage('Validate') {
       steps {
-        container('helmfile') {
-          sh 'helm lint cijenkinsio'
-        }
+        //container('helmfile') {
+        //  sh 'helmfile lint'
+        //}
         container('yamllint') {
-          sh 'yamllint --config-file yamllint.config cijenkinsio/values.yaml'
+          sh 'yamllint --config-file yamllint.config helmfile.d config'
         }
       }
     }

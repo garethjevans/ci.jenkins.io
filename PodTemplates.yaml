@@ -17,6 +17,13 @@ spec:
       image: "jenkinsciinfra/helmfile:025921"
       imagePullPolicy: "IfNotPresent"
       name: "helmfile"
+      resources:
+        limits:
+          memory: "512Mi"
+          cpu: "400m"
+        requests:
+          memory: "512Mi"
+          cpu: "400m"
       securityContext:
         privileged: false
       tty: true
@@ -30,6 +37,13 @@ spec:
       image: "cytopia/yamllint:1.22"
       imagePullPolicy: "Always"
       name: "yamllint"
+      resources:
+        limits:
+          memory: "512Mi"
+          cpu: "400m"
+        requests:
+          memory: "512Mi"
+          cpu: "400m"
       securityContext:
         privileged: false
       tty: true
