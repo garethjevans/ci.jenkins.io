@@ -341,6 +341,7 @@ controller:
     - ssh-agent
     - ssh-credentials
     - support-core
+    - tekton-client
     - timestamper
     - token-macro
     - toolenv
