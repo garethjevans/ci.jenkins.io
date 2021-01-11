@@ -9,8 +9,6 @@ releases:
   - name: tekton-pipelines
     chart: ../charts/tekton-pipelines
     namespace: tekton-pipelines
-    values:
-      - "../config/default/tekton-pipelines.yaml"
     set:
       - name: namespace
         value: tekton-pipelines
