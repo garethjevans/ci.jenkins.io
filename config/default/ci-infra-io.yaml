@@ -171,14 +171,14 @@ controller:
                       strategyId(1)
                       trust(class: 'org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$' + config.trust)
                     }
-                    traits << 'jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait' {
+                    traits << 'net.gleske.scmfilter.impl.trait.WildcardSCMHeadFilterTrait' {
                       includes('main master PR-*')
                       excludes()
                       tagIncludes('*')
                       tagExcludes()
                     }
                     traits << 'org.jenkinsci.plugins.github.label.filter.PullRequestLabelsBlackListFilterTrait' {
-                      labels('on-hold')
+                      labels('on-hold ci-skip')
                     }
                   }
                 }
@@ -217,12 +217,14 @@ controller:
                     strategyId(1)
                     trust(class: 'org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$TrustContributors')
                   }
-                  traits << 'jenkins.scm.impl.trait.WildcardSCMHeadFilterTrait' {
+                  traits << 'net.gleske.scmfilter.impl.trait.WildcardSCMHeadFilterTrait' {
                     includes('main master PR-*')
                     excludes()
+                    tagIncludes('*')
+                    tagExcludes()
                   }
                   traits << 'org.jenkinsci.plugins.github.label.filter.PullRequestLabelsBlackListFilterTrait' {
-                    labels('on-hold')
+                    labels('on-hold ci-skip')
                   }
                 }
               }
@@ -358,6 +360,7 @@ controller:
     - plain-credentials
     - prometheus
     - scm-api
+    - scm-filter-branch-pr
     - script-security
     - ssh-agent
     - ssh-credentials
