@@ -1,0 +1,14 @@
+---
+helmDefaults:
+  atomic: true
+  force: false
+  timeout: 600
+  wait: true
+
+releases:
+  - name: tekton-pipelines
+    chart: ../charts/tekton-pipelines
+    namespace: tekton-pipelines
+    set:
+      - name: namespace
+        value: tekton-pipelines

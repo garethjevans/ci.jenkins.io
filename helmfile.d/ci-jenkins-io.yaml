@@ -5,9 +5,6 @@ helmDefaults:
   timeout: 600
   wait: true
 
-repositories:
-  - name: jenkins
-    url: https://charts.jenkins.io
 releases:
   - name: jenkins
     chart: jenkins/jenkins
