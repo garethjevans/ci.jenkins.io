@@ -123,6 +123,19 @@ controller:
                       repoOwner(config.owner)
                       apiUri("https://api.github.com")
                       credentialsId("github-access-token")
+
+                      traits {
+                        gitHubTagDiscovery()
+                        cloneOptionTrait {
+                          extension {
+                            shallow(false)
+                            noTags(false)
+                            reference('')
+                            timeout(10)
+                            honorRefspec(true)
+                          }
+                        }
+                      }
                     }
                   }
                   projectFactories {
@@ -134,6 +147,12 @@ controller:
                   orphanedItemStrategy {
                     discardOldItems {
                       numToKeep(-1)
+                    }
+                  }
+                  buildStrategies {
+                    buildTags {
+                      atLeastDays("0")
+                      atMostDays("7")
                     }
                   }
                   configure { node ->
