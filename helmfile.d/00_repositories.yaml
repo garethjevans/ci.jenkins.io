@@ -1,0 +1,5 @@
+repositories:
+  - name: kubernetes-external-secrets
+    url: https://external-secrets.github.io/kubernetes-external-secrets
+  - name: jenkins
+    url: https://charts.jenkins.io
