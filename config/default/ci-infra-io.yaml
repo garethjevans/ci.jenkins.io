@@ -12,7 +12,7 @@ controller:
     configScripts:
       no-executors: |
         jenkins:
-          numExecutors: 0
+          numExecutors: 2
 
       matrix-settings: |
         jenkins:
@@ -327,6 +327,7 @@ controller:
     - git-client
     - github
     - github-api
+    - github-autostatus
     - github-branch-source
     - github-checks
     - github-label-filter
