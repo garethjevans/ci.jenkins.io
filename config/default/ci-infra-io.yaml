@@ -5,14 +5,15 @@ persistence:
   enabled: true
   size: 100Gi
 controller:
-  tag: "2.263.1-lts"
+  image: garethjevans/jenkins-image
+  tag: sha-1f13172e
   JCasC:
     enabled: true
     defaultConfig: false
     configScripts:
       no-executors: |
         jenkins:
-          numExecutors: 0
+          numExecutors: 2
 
       matrix-settings: |
         jenkins:
@@ -150,9 +151,18 @@ controller:
                     }
                   }
                   buildStrategies {
-                    buildTags {
-                      atLeastDays("0")
-                      atMostDays("7")
+                    buildAnyBranches {
+                      strategies {
+                        buildChangeRequests {
+                          ignoreTargetOnlyChanges(true)
+                          ignoreUntrustedChanges(true)
+                        }
+                        buildRegularBranches()
+                        buildTags {
+                          atLeastDays("0")
+                          atMostDays("7")
+                        }
+                      }
                     }
                   }
                   configure { node ->
@@ -184,47 +194,49 @@ controller:
                 }
               }
           - script: >
-              multibranchPipelineJob('ci.jenkins.io') {
-                displayName "ci.jenkins.io"
-                branchSources {
-                  github {
-                    id('2020120401')
-                    scanCredentialsId('github-access-token')
-                    repoOwner('garethjevans')
-                    repository('ci.jenkins.io')
+              ['ci.jenkins.io', 'jenkins-image'].each { config -> 
+                multibranchPipelineJob(config) {
+                  displayName config
+                  branchSources {
+                    github {
+                      id('2020120401')
+                      scanCredentialsId('github-access-token')
+                      repoOwner('garethjevans')
+                      repository(config)
+                    }
                   }
-                }
-                factory {
-                  workflowBranchProjectFactory {
-                    scriptPath('Jenkinsfile')
+                  factory {
+                    workflowBranchProjectFactory {
+                      scriptPath('Jenkinsfile')
+                    }
                   }
-                }
-                // don't keep build jobs for deleted branches
-                orphanedItemStrategy {
-                  discardOldItems {
-                    numToKeep(-1)
+                  // don't keep build jobs for deleted branches
+                  orphanedItemStrategy {
+                    discardOldItems {
+                      numToKeep(-1)
+                    }
                   }
-                }
-                configure { node ->
-                  def traits = node / 'sources' / 'data' / 'jenkins.branch.BranchSource' / 'source' / 'traits'
-                  traits << 'org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait' {
-                    strategyId(1)
-                  }
-                  traits << 'org.jenkinsci.plugins.github__branch__source.OriginPullRequestDiscoveryTrait' {
-                    strategyId(1)
-                  }
-                  traits << 'org.jenkinsci.plugins.github__branch__source.ForkPullRequestDiscoveryTrait' {
-                    strategyId(1)
-                    trust(class: 'org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$TrustContributors')
-                  }
-                  traits << 'net.gleske.scmfilter.impl.trait.WildcardSCMHeadFilterTrait' {
-                    includes('main master PR-*')
-                    excludes()
-                    tagIncludes('*')
-                    tagExcludes()
-                  }
-                  traits << 'org.jenkinsci.plugins.github.label.filter.PullRequestLabelsBlackListFilterTrait' {
-                    labels('on-hold ci-skip')
+                  configure { node ->
+                    def traits = node / 'sources' / 'data' / 'jenkins.branch.BranchSource' / 'source' / 'traits'
+                    traits << 'org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait' {
+                      strategyId(1)
+                    }
+                    traits << 'org.jenkinsci.plugins.github__branch__source.OriginPullRequestDiscoveryTrait' {
+                      strategyId(1)
+                    }
+                    traits << 'org.jenkinsci.plugins.github__branch__source.ForkPullRequestDiscoveryTrait' {
+                      strategyId(1)
+                      trust(class: 'org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$TrustContributors')
+                    }
+                    traits << 'net.gleske.scmfilter.impl.trait.WildcardSCMHeadFilterTrait' {
+                      includes('main master PR-*')
+                      excludes()
+                      tagIncludes('*')
+                      tagExcludes()
+                    }
+                    traits << 'org.jenkinsci.plugins.github.label.filter.PullRequestLabelsBlackListFilterTrait' {
+                      labels('on-hold ci-skip')
+                    }
                   }
                 }
               }
@@ -284,103 +296,7 @@ controller:
                           value: "windows"
                           effect: "NoSchedule"
 
-  overwritePlugins: true
-  installPlugins:
-    - ansicolor
-    - antisamy-markup-formatter
-    - authentication-tokens
-    - azure-container-agents
-    - azure-vm-agents
-    - basic-branch-build-strategies
-    - blueocean
-    - blueocean-autofavorite
-    - blueocean-commons
-    - blueocean-config
-    - blueocean-core-js
-    - blueocean-dashboard
-    - blueocean-display-url
-    - blueocean-events
-    - blueocean-git-pipeline
-    - blueocean-github-pipeline
-    - blueocean-i18n
-    - blueocean-jira
-    - blueocean-jwt
-    - blueocean-personalization
-    - blueocean-pipeline-api-impl
-    - blueocean-pipeline-editor
-    - blueocean-pipeline-scm-api
-    - blueocean-rest
-    - blueocean-rest-impl
-    - blueocean-web
-    - branch-api
-    - build-name-setter
-    - config-file-provider
-    - cloud-stats
-    - configuration-as-code
-    - credentials
-    - credentials-binding
-    # - datadog
-    - ec2
-    - embeddable-build-status
-    - extended-read-permission
-    - git
-    - git-client
-    - github
-    - github-api
-    - github-branch-source
-    - github-checks
-    - github-label-filter
-    - groovy
-    - inline-pipeline
-    - javadoc
-    - jira
-    - job-dsl
-    - junit
-    - kubernetes
-    - kubernetes-credentials
-    - kubernetes-credentials-provider
-    - ldap
-    - lockable-resources
-    - pipeline-utility-steps
-    - metrics
-    - matrix-auth
-    - matrix-project
-    - pipeline-build-step
-    - pipeline-github
-    - pipeline-graph-analysis
-    - pipeline-input-step
-    - pipeline-milestone-step
-    - pipeline-model-api
-    - pipeline-model-definition
-    - pipeline-model-extensions
-    - pipeline-rest-api
-    - pipeline-stage-step
-    - pipeline-stage-tags-metadata
-    - pipeline-stage-view
-    - plain-credentials
-    - prometheus
-    - scm-api
-    - scm-filter-branch-pr
-    - script-security
-    - ssh-agent
-    - ssh-credentials
-    - support-core
-    - timestamper
-    - token-macro
-    - toolenv
-    - variant
-    - warnings-ng
-    - workflow-aggregator
-    - workflow-api
-    - workflow-basic-steps
-    - workflow-cps
-    - workflow-cps-global-lib
-    - workflow-durable-task-step
-    - workflow-job
-    - workflow-multibranch
-    - workflow-scm-step
-    - workflow-step-api
-    - workflow-support
+  overwritePlugins: false
 
   ingress:
     enabled: true
