@@ -297,7 +297,7 @@ controller:
                           effect: "NoSchedule"
 
   overwritePlugins: false
-  installPlugins: false  
+  installPlugins: false
 
   ingress:
     enabled: true
