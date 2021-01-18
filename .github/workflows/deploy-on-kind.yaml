@@ -22,8 +22,8 @@ jobs:
       - name: Setup helmfile
         uses: mamezou-tech/setup-helmfile@v0.7.0
         with:
-          helmfile-version: "v0.135.0"
-          helm-version: "v3.4.2"
+          helmfile-version: "v0.137.0"
+          helm-version: "v3.5.0"
 
       # - name: Run Lint
       #   run: helmfile lint
