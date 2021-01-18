@@ -2,7 +2,7 @@
 helmDefaults:
   atomic: true
   force: false
-  timeout: 600
+  timeout: 900
   wait: true
 
 releases:
