@@ -6,6 +6,13 @@ helmDefaults:
   wait: true
 
 releases:
+  - name: tekton-pipeline
+    chart: cdf/tekton-pipeline
+    version: 0.19.1
+    namespace: tekton-pipelines
+    set:
+      - name: namespace
+        value: tekton-pipelines
   - name: tekton-pipelines
     chart: ../charts/tekton-pipelines
     namespace: tekton-pipelines
