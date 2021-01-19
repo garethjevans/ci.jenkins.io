@@ -13,9 +13,9 @@ releases:
     set:
       - name: namespace
         value: tekton-pipelines
-  - name: tekton-pipelines
-    chart: ../charts/tekton-pipelines
-    namespace: tekton-pipelines
-    set:
-      - name: namespace
-        value: tekton-pipelines
+          #  - name: tekton-pipelines
+          #    chart: ../charts/tekton-pipelines
+          #    namespace: tekton-pipelines
+          #    set:
+          #      - name: namespace
+          #        value: tekton-pipelines
