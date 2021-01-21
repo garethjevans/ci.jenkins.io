@@ -21,5 +21,16 @@ jobs:
           curl -sSfL -o updatecli https://github.com/olblak/updatecli/releases/latest/download/updatecli.linux.amd64
           chmod +x ./updatecli
           ./updatecli apply --push=false --config ./updateCli/updatecli.d --values ./updateCli/values.github-action.yaml
+          rm updatecli
           git status
           git diff
+
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: 'chore(deps): update jenkins version'
+          committer: Gareth Evans <gareth@bryncynfelin.co.uk>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          signoff: false
+          title: 'chore(deps): update jenkins version'
