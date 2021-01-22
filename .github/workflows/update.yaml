@@ -29,6 +29,7 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v3
         with:
+          token: ${{ secrets.ACCESS_TOKEN }}
           commit-message: 'chore(deps): update jenkins version'
           committer: Gareth Evans <gareth@bryncynfelin.co.uk>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
