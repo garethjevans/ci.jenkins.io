@@ -9,21 +9,16 @@ on:
 jobs:
   update_cli:
     runs-on: ubuntu-latest
-    container:
-      image: garethjevans/updatecli:10
-      options: --user 1000
     steps:
 
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Update CLI
-        #uses: docker://garethjevans/updatecli:10
-        #with:
-        #  entrypoint: updatecli
-        #  args: apply --debug --push=false --config ./updateCli/updatecli.d --values ./updateCli/values.github-action.yaml
-        run: |
-          updatecli apply --debug --push=false --config ./updateCli/updatecli.d --values ./updateCli/values.github-action.yaml
+        uses: docker://garethjevans/updatecli:11
+        with:
+          entrypoint: updatecli
+          args: apply --debug --push=false --config ./updateCli/updatecli.d --values ./updateCli/values.github-action.yaml
 
       - name: Create Pull Request
         id: cpr
