@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Update CLI
-        uses: docker://garethjevans/updatecli:6
+        uses: docker://garethjevans/updatecli:8
         with:
           entrypoint: updatecli
           args: apply --push=false --config ./updateCli/updatecli.d --values ./updateCli/values.github-action.yaml
