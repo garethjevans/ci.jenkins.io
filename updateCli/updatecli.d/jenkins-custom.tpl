@@ -1,7 +1,7 @@
 source:
   kind: dockerDigest
   spec:
-    image: "garethjevans/jenkins"
+    image: "jenkinsciinfra/jenkins-lts"
     tag: "latest"
 targets:
   imageTag:
