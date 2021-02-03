@@ -15,10 +15,12 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Update CLI
-        uses: docker://garethjevans/updatecli:11
-        with:
-          entrypoint: updatecli
-          args: apply --debug --push=false --config ./updateCli/updatecli.d --values ./updateCli/values.github-action.yaml
+        run: |
+          curl -sSfL -o updatecli https://github.com/updatecli/updatecli/releases/latest/download/updatecli.linux.amd64
+          chmod +x ./updatecli
+          ./updatecli version
+          ./updatecli apply --debug --push=false --config ./updateCli/updatecli.d --values ./updateCli/values.github-action.yaml
+          rm updatecli
 
       - name: Create Pull Request
         id: cpr
