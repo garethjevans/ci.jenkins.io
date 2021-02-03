@@ -1,12 +1,11 @@
----
 rbac:
   readSecrets: true
 persistence:
   enabled: true
   size: 100Gi
 controller:
-  image: jenkinsciinfra/jenkins-lts
-  tag: e598c7d74e1374aac8d1c6154f085db8649e8aff
+  image: jenkinsciinfra/jenkins-lts@sha256
+  tag: 9925b90cee79cb866c9dd24f784e4aa523e20a66a37c8b2dea13812331d8d4cf
   JCasC:
     enabled: true
     defaultConfig: false
@@ -14,7 +13,6 @@ controller:
       no-executors: |
         jenkins:
           numExecutors: 2
-
       matrix-settings: |
         jenkins:
           authorizationStrategy:
@@ -28,7 +26,6 @@ controller:
                 - "Overall/Read:anonymous"
                 - "Job/Read:anonymous"
                 - "View/Read:anonymous"
-
       security-realm: |
         jenkins:
           securityRealm:
@@ -37,13 +34,11 @@ controller:
               users:
                 - id: "admin"
                   password: "p4ssw0rd"
-
       misc-jenkins: |
         jenkins:
           remotingSecurity:
             enabled: true
           slaveAgentPort: 50000
-
       system-message: |
         jenkins:
           systemMessage: |
@@ -62,26 +57,22 @@ controller:
                 <li><a href="https://github.com/jenkins-infra/charts/blob/master/config/cijenkinsio/jenkins.yaml">configuration-as-code for ci.jenkins.io</a></li>
               </ul>
             </div>
-
       markup-formatter: |
         jenkins:
           markupFormatter:
             rawHtml:
               disableSyntaxHighlighting: false
-
       crumb-issuer: |
         jenkins:
           crumbIssuer:
             standard:
               excludeClientIPFromCrumb: true
-
       misc-security: |
         security:
           apiToken:
             creationOfLegacyTokenEnabled: false
             tokenGenerationOnCreationEnabled: false
             usageStatisticsEnabled: true
-
       misc-unclassified: |
         unclassified:
           appInsightsGlobalConfig:
@@ -96,7 +87,6 @@ controller:
             pollingThreadCount: 10
           timestamper:
             allPipelines: true
-
       jobs-settings: |
         jobs:
           - script: >
@@ -258,7 +248,6 @@ controller:
           location:
             adminAddress: "nobody@jenkins.io"
             url: "https://ci.jenkins.io"
-
       k8s-settings: |
         jenkins:
           clouds:
@@ -295,9 +284,7 @@ controller:
                           operator: "Equal"
                           value: "windows"
                           effect: "NoSchedule"
-
   overwritePlugins: false
   installPlugins: false
-
   ingress:
     enabled: true
