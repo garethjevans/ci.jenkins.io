@@ -5,7 +5,7 @@ persistence:
   enabled: true
   size: 100Gi
 controller:
-  image: garethjevans/jenkins
+  image: jenkinsciinfra/jenkins-lts
   tag: e598c7d74e1374aac8d1c6154f085db8649e8aff
   JCasC:
     enabled: true

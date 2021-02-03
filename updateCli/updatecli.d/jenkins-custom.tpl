@@ -5,7 +5,7 @@ source:
     tag: "latest"
 targets:
   imageTag:
-    name: "garethjevans/jenkins custom image docker digest"
+    name: "jenkinsciinfra/jenkins-lts custom image docker digest"
     kind: yaml
     spec:
       file: "config/default/ci-infra-io.yaml"
