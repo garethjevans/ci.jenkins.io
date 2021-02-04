@@ -4,8 +4,8 @@ persistence:
   enabled: true
   size: 100Gi
 controller:
-  image: jenkinsciinfra/jenkins-lts@sha256
-  tag: 5a9a5bfeb152bcdec71192b5d85f8767805fc1eb70e9fa6938735e2c04a8e8de
+  image: jenkinsciinfra/jenkins-weekly@sha256
+  tag: 540af0c08cee2f07e6e248d857e7ae64bd1f2c3868104536c26b2b192cb21dfe
   JCasC:
     enabled: true
     defaultConfig: false
@@ -75,8 +75,6 @@ controller:
             usageStatisticsEnabled: true
       misc-unclassified: |
         unclassified:
-          appInsightsGlobalConfig:
-            appInsightsEnabled: false
           gitSCM:
             createAccountBasedOnEmail: false
             globalConfigEmail: "oscar@example.com"
@@ -288,3 +286,11 @@ controller:
   installPlugins: false
   ingress:
     enabled: true
+  
+  probes:
+    startupProbe:
+      initialDelaySeconds: 240
+    livenessProbe:
+      initialDelaySeconds: 240
+    readinessProbe:
+      initialDelaySeconds: 240       
