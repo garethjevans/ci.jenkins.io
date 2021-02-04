@@ -5,7 +5,7 @@ persistence:
   size: 100Gi
 controller:
   image: jenkinsciinfra/jenkins-weekly@sha256
-  tag: 540af0c08cee2f07e6e248d857e7ae64bd1f2c3868104536c26b2b192cb21dfe
+  tag: 209c51f7b4bbc5fe2011b766344e7ea24c25b4e059573d1dd4163ac74761b785
   JCasC:
     enabled: true
     defaultConfig: false
@@ -286,11 +286,10 @@ controller:
   installPlugins: false
   ingress:
     enabled: true
-  
   probes:
     startupProbe:
       initialDelaySeconds: 240
     livenessProbe:
       initialDelaySeconds: 240
     readinessProbe:
-      initialDelaySeconds: 240       
+      initialDelaySeconds: 240
