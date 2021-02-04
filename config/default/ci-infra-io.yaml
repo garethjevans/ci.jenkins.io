@@ -75,8 +75,6 @@ controller:
             usageStatisticsEnabled: true
       misc-unclassified: |
         unclassified:
-          appInsightsGlobalConfig:
-            appInsightsEnabled: false
           gitSCM:
             createAccountBasedOnEmail: false
             globalConfigEmail: "oscar@example.com"
