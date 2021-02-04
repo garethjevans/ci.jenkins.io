@@ -291,8 +291,8 @@ controller:
   
   probes:
     startupProbe:
-      initialDelaySeconds: 120
+      initialDelaySeconds: 240
     livenessProbe:
-      initialDelaySeconds: 120
+      initialDelaySeconds: 240
     readinessProbe:
-      initialDelaySeconds: 120       
+      initialDelaySeconds: 240       
