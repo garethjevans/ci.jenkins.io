@@ -288,3 +288,11 @@ controller:
   installPlugins: false
   ingress:
     enabled: true
+  
+  probes:
+    startupProbe:
+      initialDelaySeconds: 120
+    livenessProbe:
+      initialDelaySeconds: 120
+    readinessProbe:
+      initialDelaySeconds: 120       
