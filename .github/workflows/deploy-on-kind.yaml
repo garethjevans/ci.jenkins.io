@@ -32,6 +32,4 @@ jobs:
 
       - name: Deploy Chart
         run: |
-          helmfile --debug sync || true
-          kubectl get pods -n jenkins
-          kubectl logs jenkins-0 -c jenkins -n jenkins
+          helmfile --debug sync
