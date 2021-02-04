@@ -31,6 +31,9 @@ jobs:
           node_image: ${{ matrix.kubernetes_version }}
 
       - name: Deploy Chart
-        run: helmfile --debug sync
+        run: |
+          helmfile --debug sync || true
+          kubectl get pods
+
 
 
