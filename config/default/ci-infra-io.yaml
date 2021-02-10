@@ -5,7 +5,7 @@ persistence:
   size: 100Gi
 controller:
   image: jenkinsciinfra/jenkins-weekly@sha256
-  tag: 88db679fdea6bdeedad9d51612e239afe90c7abe84c1f304e75537c21c6f0dfe
+  tag: 795a31b4c2e0884e469ee9fd1ff7c81bd59404bc95944fa0767cf912a80be79a
   JCasC:
     enabled: true
     defaultConfig: false
