@@ -1,3 +1,4 @@
+---
 rbac:
   readSecrets: true
 persistence:
@@ -93,7 +94,7 @@ controller:
                   name        : "Core",
                   repositories: "test-repo*",
                   excludes    : "",
-                  trust       : "TrustContributors"
+                  trust       : "TrustPermission"
                 ]
               ]
 
@@ -135,7 +136,8 @@ controller:
                   // don't keep build jobs for deleted branches
                   orphanedItemStrategy {
                     discardOldItems {
-                      numToKeep(-1)
+                      daysToKeep(7)
+                      numToKeep(10)
                     }
                   }
                   buildStrategies {
@@ -240,7 +242,7 @@ controller:
                     scm:
                       git:
                         id: "github-access-token"
-                        remote: "https://github.com/jenkins-infra/pipeline-library.git"
+                        remote: "https://github.com/garethjevans/pipeline-library.git"
       location: |
         unclassified:
           location:
