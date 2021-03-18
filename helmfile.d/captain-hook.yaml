@@ -8,7 +8,7 @@ helmDefaults:
 releases:
   - name: captain-hook
     chart: captain-hook/captain-hook
-    version: 0.0.15
+    version: 0.0.17
     namespace: jenkins
     values:
       - "../config/default/captain-hook.yaml"
