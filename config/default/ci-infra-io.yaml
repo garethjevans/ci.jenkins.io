@@ -1,3 +1,4 @@
+---
 rbac:
   readSecrets: true
 persistence:
@@ -19,6 +20,7 @@ controller:
             globalMatrix:
               permissions:
                 - "Overall/Administer:admin"
+                - "Credentials/Create:admin"
                 - "Overall/SystemRead:authenticated"
                 - "Overall/Read:authenticated"
                 - "Agent/ExtendedRead:authenticated"
@@ -207,6 +209,8 @@ controller:
                   }
                   configure { node ->
                     def traits = node / 'sources' / 'data' / 'jenkins.branch.BranchSource' / 'source' / 'traits'
+                    traits << 'org.jenkinsci.plugins.github__branch__source.TagDiscoveryTrait' {
+                    }
                     traits << 'org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait' {
                       strategyId(1)
                     }
