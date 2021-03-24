@@ -19,11 +19,14 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install Kubectl
+        uses: azure/setup-kubectl@v1
+
       - name: Setup helmfile
         uses: mamezou-tech/setup-helmfile@v0.7.0
         with:
           helmfile-version: "v0.138.3"
-          helm-version: "v3.5.1"
+          helm-version: "v3.5.2"
 
       - name: Create Kind Cluster
         uses: helm/kind-action@v1.1.0
@@ -32,4 +35,5 @@ jobs:
 
       - name: Deploy Chart
         run: |
-          helmfile --debug sync
+          helmfile --debug sync || true
+          kubectl get all
