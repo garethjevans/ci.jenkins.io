@@ -6,7 +6,7 @@ persistence:
   size: 100Gi
 controller:
   image: jenkinsciinfra/jenkins-weekly@sha256
-  tag: 36d2109a873b4a88a0037d64ade7224720bebf413d662681a6569d4342e0363a
+  tag: a345c500df1041be8a05ef1af628e97632cc23387fe8f0520a2adadc53cd4027
   JCasC:
     enabled: true
     defaultConfig: false
@@ -81,8 +81,6 @@ controller:
             createAccountBasedOnEmail: false
             globalConfigEmail: "oscar@example.com"
             globalConfigName: "oscar"
-          pipeline-model-docker:
-            dockerLabel: "docker"
           pollSCM:
             pollingThreadCount: 10
           timestamper:
@@ -188,12 +186,33 @@ controller:
               ['ci.jenkins.io', 'jenkins-image'].each { config ->
                 multibranchPipelineJob(config) {
                   displayName config
+
                   branchSources {
-                    github {
-                      id('2020120401')
-                      scanCredentialsId('github-access-token')
-                      repoOwner('garethjevans')
-                      repository(config)
+                    branchSource {
+                      source {
+                        github {
+                          credentialsId("github-access-token")
+                          configuredByUrl(true)
+                          repositoryUrl('https://github.com/garethjevans/' + config)
+                          repoOwner('garethjevans')
+                          repository(config)
+                        }
+                      }
+                      buildStrategies {
+                        buildAnyBranches {
+                          strategies {
+                            buildChangeRequests {
+                              ignoreTargetOnlyChanges(true)
+                              ignoreUntrustedChanges(true)
+                            }
+                            buildRegularBranches()
+                            buildTags {
+                              atLeastDays("0")
+                              atMostDays("7")
+                            }
+                          }
+                        }
+                      }
                     }
                   }
                   factory {
@@ -229,6 +248,15 @@ controller:
                     }
                     traits << 'org.jenkinsci.plugins.github.label.filter.PullRequestLabelsBlackListFilterTrait' {
                       labels('on-hold ci-skip')
+                    }
+                    traits << 'jenkins.plugins.git.traits.CloneOptionTrait' {
+                      extension(class: 'hudson.plugins.git.extensions.impl.CloneOption') {
+                        shallow(false)
+                        noTag(false)
+                        reference()
+                        depth(0)
+                        honorRefspec(false)
+                      }
                     }
                   }
                 }
@@ -289,6 +317,17 @@ controller:
                           effect: "NoSchedule"
   overwritePlugins: false
   installPlugins: false
+  sidecars:
+    configAutoReload:
+      env:
+        # https://github.com/kiwigrid/k8s-sidecar#configuration-environment-variables
+        - name: METHOD
+          # Polling mode (instead of watching kube API)
+          value: "SLEEP"
+        # https://github.com/kiwigrid/k8s-sidecar#configuration-environment-variables
+        - name: SLEEP_TIME
+          # Time in seconds between two polls
+          value: "60"
   ingress:
     enabled: true
   probes:

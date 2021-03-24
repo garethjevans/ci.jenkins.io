@@ -12,9 +12,9 @@ spec:
       version: latest
   template:
     metadata:
-#      annotations:
-#        "jenkins.io/credentials-description": "github app"
-#      labels:
-#        "jenkins.io/credentials-type": "gitHubApp"
-    data:
-      appID: "1234"
+      annotations:
+        "jenkins.io/credentials-description": "github app"
+      labels:
+        "jenkins.io/credentials-type": "gitHubApp"
+    stringData:
+      appID: "104739"
