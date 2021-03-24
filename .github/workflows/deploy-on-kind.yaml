@@ -35,7 +35,8 @@ jobs:
 
       - name: Deploy Chart
         run: |
-          helmfile sync 2> /dev/null
+          set -x
+          helmfile sync
           SUCCESS=$?
           kubectl get all --namespace jenkins
           kubectl describe pod jenkins-0 --namespace jenkins
