@@ -188,12 +188,33 @@ controller:
               ['ci.jenkins.io', 'jenkins-image'].each { config ->
                 multibranchPipelineJob(config) {
                   displayName config
+
                   branchSources {
-                    github {
-                      id('2020120401')
-                      scanCredentialsId('github-access-token')
-                      repoOwner('garethjevans')
-                      repository(config)
+                    branchSource {
+                      source {
+                        github {
+                          credentialsId("github-access-token")
+                          configuredByUrl(true)
+                          repositoryUrl('https://github.com/garethjevans/' + config)
+                          repoOwner('garethjevans')
+                          repository(config)
+                        }
+                      }
+                      buildStrategies {
+                        buildAnyBranches {
+                          strategies {
+                            buildChangeRequests {
+                              ignoreTargetOnlyChanges(true)
+                              ignoreUntrustedChanges(true)
+                            }
+                            buildRegularBranches()
+                            buildTags {
+                              atLeastDays("0")
+                              atMostDays("7")
+                            }
+                          }
+                        }
+                      }
                     }
                   }
                   factory {
