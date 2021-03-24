@@ -42,4 +42,4 @@ jobs:
         run: |
           kubectl get all --namespace jenkins
           kubectl describe pod jenkins-0 --namespace jenkins
-          kubectl logs jenkins-0 -c jenkins --namespace
+          kubectl logs jenkins-0 -c jenkins --namespace jenkins
