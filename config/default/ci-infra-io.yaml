@@ -6,7 +6,7 @@ persistence:
   size: 100Gi
 controller:
   image: jenkinsciinfra/jenkins-weekly@sha256
-  tag: 36d2109a873b4a88a0037d64ade7224720bebf413d662681a6569d4342e0363a
+  tag: a345c500df1041be8a05ef1af628e97632cc23387fe8f0520a2adadc53cd4027
   JCasC:
     enabled: true
     defaultConfig: false
@@ -229,6 +229,15 @@ controller:
                     }
                     traits << 'org.jenkinsci.plugins.github.label.filter.PullRequestLabelsBlackListFilterTrait' {
                       labels('on-hold ci-skip')
+                    }
+                    traits << 'jenkins.plugins.git.traits.CloneOptionTrait' {
+                      extension(class: 'hudson.plugins.git.extensions.impl.CloneOption') {
+                        shallow(false)
+                        noTag(false)
+                        reference()
+                        depth(0)
+                        honorRefspec(false)
+                      }
                     }
                   }
                 }
