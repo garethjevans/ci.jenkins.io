@@ -81,8 +81,6 @@ controller:
             createAccountBasedOnEmail: false
             globalConfigEmail: "oscar@example.com"
             globalConfigName: "oscar"
-          pipeline-model-docker:
-            dockerLabel: "docker"
           pollSCM:
             pollingThreadCount: 10
           timestamper:
