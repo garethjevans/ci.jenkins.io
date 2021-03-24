@@ -36,4 +36,4 @@ jobs:
       - name: Deploy Chart
         run: |
           helmfile --debug sync || true
-          kubectl get all
+          kubectl get all --namespace jenkins
