@@ -35,10 +35,11 @@ jobs:
 
       - name: Deploy Chart
         run: |
-          set -x
           helmfile sync
-          SUCCESS=$?
+
+      - name: Debug Failures
+        if: ${{ failure() }}
+        run: |
           kubectl get all --namespace jenkins
           kubectl describe pod jenkins-0 --namespace jenkins
           kubectl logs jenkins-0 -c jenkins
-          exit $SUCCESS
