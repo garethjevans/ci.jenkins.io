@@ -9,9 +9,12 @@ sources:
       repository: "docker-jenkins-weekly"
       token: "{{ requiredEnv .github.token }}"
       username: "{{ .github.username }}"
-#      versionFilter:
-#        pattern: ~0
-#        kind: semver
+conditions:
+  dockerImage:
+    name: Ensure that the image "jenkinsciinfra/jenkins-weekly:<found_version>" is published on the DockerHub
+    kind: dockerImage
+    spec:
+      image: "jenkinsciinfra/jenkins-weekly"    
   targets:
     imageTag:
       name: "jenkinsciinfra/jenkins-weekly custom image docker digest"
