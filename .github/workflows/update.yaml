@@ -21,6 +21,8 @@ jobs:
           ./updatecli version
           ./updatecli apply --debug --push=false --config ./updateCli/updatecli.d --values ./updateCli/values.github-action.yaml
           rm updatecli
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Create Pull Request
         id: cpr
