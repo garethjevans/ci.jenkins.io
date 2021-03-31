@@ -3,7 +3,7 @@ github:
   user: "Gareth Evans"
   email: "gareth@bryncynfelin.co.uk"
   username: "garethjevans"
-  token: "UPDATECLI_GITHUB_TOKEN"
+  token: "ACCESS_TOKEN"
   branch: "main"
   owner: "garethjevans"
   repository: "ci.jenkins.io"
