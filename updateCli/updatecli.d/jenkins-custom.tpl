@@ -15,10 +15,10 @@ conditions:
     kind: dockerImage
     spec:
       image: "jenkinsciinfra/jenkins-weekly"    
-  targets:
-    imageTag:
-      name: "jenkinsciinfra/jenkins-weekly custom image docker digest"
-      kind: yaml
-      spec:
-        file: "config/default/ci-infra-io.yaml"
-        key: "controller.tag"
+targets:
+  imageTag:
+    name: "jenkinsciinfra/jenkins-weekly custom image docker digest"
+    kind: yaml
+    spec:
+      file: "config/default/ci-infra-io.yaml"
+      key: "controller.tag"
