@@ -9,9 +9,9 @@ sources:
       repository: "docker-jenkins-weekly"
       token: "{{ requiredEnv .github.token }}"
       username: "{{ .github.username }}"
-      versionFilter:
-        pattern: ~0
-        kind: semver
+#      versionFilter:
+#        pattern: ~0
+#        kind: semver
   targets:
     imageTag:
       name: "jenkinsciinfra/jenkins-weekly custom image docker digest"
