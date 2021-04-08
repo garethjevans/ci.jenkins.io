@@ -1,3 +1,4 @@
+---
 rbac:
   readSecrets: true
 persistence:
@@ -283,9 +284,9 @@ controller:
           clouds:
             - kubernetes:
                 containerCapStr: "100"
-                jenkinsTunnel: "jenkins-agent:50000"
                 jenkinsUrl: "http://jenkins:8080"
                 maxRequestsPerHostStr: "300"
+                webSocket: true
                 name: "kubernetes"
                 namespace: "jenkins"
                 podRetention: "Never"
@@ -296,7 +297,7 @@ controller:
                   - key: "jenkins/jenkins-agent"
                     value: "true"
                 templates:
-                  - name: jnlp-linux
+                  - name: jnlp
                     nodeSelector: "kubernetes.io/os=linux"
                     containers:
                       - name: jnlp
@@ -305,15 +306,8 @@ controller:
                         resourceLimitMemory: "512Mi"
                         resourceRequestCpu: "500m"
                         resourceRequestMemory: "512Mi"
-                        args: "^${computer.jnlpmac} ^${computer.name}"
+                        args: 1d
                         alwaysPullImage: true
-                    yaml: |-
-                      spec:
-                        tolerations:
-                        - key: "os"
-                          operator: "Equal"
-                          value: "windows"
-                          effect: "NoSchedule"
   overwritePlugins: true
   installPlugins: false
   sidecars:
