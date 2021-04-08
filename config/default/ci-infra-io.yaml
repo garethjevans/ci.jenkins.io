@@ -314,7 +314,7 @@ controller:
                           operator: "Equal"
                           value: "windows"
                           effect: "NoSchedule"
-  overwritePlugins: false
+  overwritePlugins: true
   installPlugins: false
   sidecars:
     configAutoReload:
