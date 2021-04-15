@@ -120,7 +120,7 @@ controller:
                             noTags(false)
                             reference('')
                             timeout(10)
-                            honorRefspec(true)
+                            honorRefspec(false)
                           }
                         }
                       }
@@ -177,6 +177,9 @@ controller:
                     }
                     traits << 'org.jenkinsci.plugins.github.label.filter.PullRequestLabelsBlackListFilterTrait' {
                       labels('on-hold ci-skip')
+                    }
+                    traits << 'jenkins.plugins.git.traits.LocalBranchTrait' {
+                    
                     }
                   }
                 }
@@ -251,11 +254,14 @@ controller:
                     traits << 'jenkins.plugins.git.traits.CloneOptionTrait' {
                       extension(class: 'hudson.plugins.git.extensions.impl.CloneOption') {
                         shallow(false)
-                        noTag(false)
+                        noTags(false)
                         reference()
                         depth(0)
                         honorRefspec(false)
                       }
+                    }
+                    traits << 'jenkins.plugins.git.traits.LocalBranchTrait' {
+                    
                     }
                   }
                 }
