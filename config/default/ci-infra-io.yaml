@@ -1,3 +1,4 @@
+---
 rbac:
   readSecrets: true
 persistence:
@@ -103,7 +104,7 @@ controller:
           location:
             adminAddress: "nobody@jenkins.io"
             url: "https://ci.jenkins.io"
-      k8s-settings: |
+      agent-settings: |
         jenkins:
           clouds:
             - kubernetes:
