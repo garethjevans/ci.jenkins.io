@@ -177,7 +177,7 @@ controller:
                       labels('on-hold ci-skip')
                     }
                     traits << 'jenkins.plugins.git.traits.LocalBranchTrait' {
-
+                      // empty
                     }
                   }
                 }
@@ -258,7 +258,7 @@ controller:
                       }
                     }
                     traits << 'jenkins.plugins.git.traits.LocalBranchTrait' {
-
+                      // empty
                     }
                   }
                 }
