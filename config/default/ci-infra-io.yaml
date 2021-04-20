@@ -95,6 +95,7 @@ controller:
                   trust       : "TrustPermission"
                 ]
               ]
+
               configuration.each { jobConfig ->
                 def config = [
                   displayName: jobConfig.name,
@@ -176,6 +177,7 @@ controller:
                       labels('on-hold ci-skip')
                     }
                     traits << 'jenkins.plugins.git.traits.LocalBranchTrait' {
+
                     }
                   }
                 }
@@ -256,6 +258,7 @@ controller:
                       }
                     }
                     traits << 'jenkins.plugins.git.traits.LocalBranchTrait' {
+
                     }
                   }
                 }
