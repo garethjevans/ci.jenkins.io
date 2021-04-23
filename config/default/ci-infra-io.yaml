@@ -1,3 +1,4 @@
+---
 rbac:
   readSecrets: true
 persistence:
@@ -6,6 +7,7 @@ persistence:
 controller:
   image: jenkinsciinfra/jenkins-weekly
   tag: 0.2.2-2.289
+  imagePullPolicy: IfNotPresent  
   JCasC:
     enabled: true
     defaultConfig: false
@@ -129,11 +131,9 @@ controller:
                       scriptPath("Jenkinsfile")
                     }
                   }
-                  // don't keep build jobs for deleted branches
                   orphanedItemStrategy {
                     discardOldItems {
-                      daysToKeep(7)
-                      numToKeep(10)
+                      daysToKeep(1)
                     }
                   }
                   buildStrategies {
@@ -219,10 +219,9 @@ controller:
                       scriptPath('Jenkinsfile')
                     }
                   }
-                  // don't keep build jobs for deleted branches
                   orphanedItemStrategy {
                     discardOldItems {
-                      numToKeep(-1)
+                      daysToKeep(1)
                     }
                   }
                   configure { node ->
@@ -332,3 +331,4 @@ controller:
       initialDelaySeconds: 240
     readinessProbe:
       initialDelaySeconds: 240
+...
