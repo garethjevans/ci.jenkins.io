@@ -1,4 +1,3 @@
----
 rbac:
   readSecrets: true
 persistence:
@@ -6,8 +5,8 @@ persistence:
   size: 100Gi
 controller:
   image: jenkinsciinfra/jenkins-weekly
-  tag: 0.2.2-2.289
-  imagePullPolicy: IfNotPresent  
+  tag: 0.2.5-2.289
+  imagePullPolicy: IfNotPresent
   JCasC:
     enabled: true
     defaultConfig: false
@@ -331,4 +330,3 @@ controller:
       initialDelaySeconds: 240
     readinessProbe:
       initialDelaySeconds: 240
-...
