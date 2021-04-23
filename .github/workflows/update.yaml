@@ -19,6 +19,8 @@ jobs:
           curl -sSfL -o updatecli.tar.gz https://github.com/updatecli/updatecli/releases/latest/download/updatecli_Linux_x86_64.tar.gz
           tar xvfz updatecli.tar.gz
           rm updatecli.tar.gz
+          rm LICENSE
+          rm README.adoc
           chmod +x ./updatecli
           ./updatecli version
           ./updatecli apply --debug --push=false --config ./updateCli/updatecli.d --values ./updateCli/values.github-action.yaml
