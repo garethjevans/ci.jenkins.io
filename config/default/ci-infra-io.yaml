@@ -4,8 +4,8 @@ persistence:
   enabled: true
   size: 100Gi
 controller:
-  image: jenkinsciinfra/jenkins-weekly
-  tag: 0.2.7-2.289
+  image: garethjevans/jenkins
+  tag: 0.5.9-2.277.3
   imagePullPolicy: IfNotPresent
   JCasC:
     enabled: true

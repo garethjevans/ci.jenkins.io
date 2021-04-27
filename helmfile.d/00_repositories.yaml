@@ -3,5 +3,5 @@ repositories:
     url: https://external-secrets.github.io/kubernetes-external-secrets
   - name: jenkins
     url: https://charts.jenkins.io
-  - name: captain-hook
-    url: https://garethjevans.github.io/captain-hook
+  - name: jenkins-infra
+    url: https://jenkins-infra.github.io/captain-hook

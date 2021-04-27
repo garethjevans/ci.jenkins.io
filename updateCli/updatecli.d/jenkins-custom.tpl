@@ -1,23 +1,23 @@
-title: Bump jenkins-weekly custom image
+title: Bump jenkins custom image
 pipelineID: bumpjenkinsweekly
 sources:
   default:
     kind: githubRelease
     spec:
-      name: Get jenkins-infra/docker-jenkins-weekly latest version
-      owner: "jenkins-infra"
-      repository: "docker-jenkins-weekly"
+      name: Get garethjevans/jenkins latest version
+      owner: "garethjevans"
+      repository: "jenkins-image"
       token: "{{ requiredEnv .github.token }}"
       username: "{{ .github.username }}"
 conditions:
   dockerImage:
-    name: Ensure that the image "jenkinsciinfra/jenkins-weekly:<found_version>" is published on the DockerHub
+    name: Ensure that the image "garethjevans/jenkins:<found_version>" is published on the DockerHub
     kind: dockerImage
     spec:
-      image: "jenkinsciinfra/jenkins-weekly"    
+      image: "garethjevans/jenkins"    
 targets:
   imageTag:
-    name: "jenkinsciinfra/jenkins-weekly custom image docker digest"
+    name: "garethjevans/jenkins custom image docker digest"
     kind: yaml
     spec:
       file: "config/default/ci-infra-io.yaml"
