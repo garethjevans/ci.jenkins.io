@@ -1,3 +1,4 @@
+---
 rbac:
   readSecrets: true
 persistence:
@@ -182,7 +183,7 @@ controller:
                 }
               }
           - script: >
-              ['ci.jenkins.io', 'jenkins-image'].each { config ->
+              ['ci.jenkins.io', 'jenkins-image', 'test-tekton-client'].each { config ->
                 multibranchPipelineJob(config) {
                   displayName config
                   branchSources {
