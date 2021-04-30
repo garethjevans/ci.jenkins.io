@@ -13,7 +13,7 @@ controller:
     configScripts:
       no-executors: |
         jenkins:
-          numExecutors: 0
+          numExecutors: 2
       matrix-settings: |
         jenkins:
           authorizationStrategy:
