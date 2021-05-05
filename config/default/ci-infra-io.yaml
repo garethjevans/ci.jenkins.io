@@ -189,7 +189,7 @@ controller:
                     branchSource {
                       source {
                         github {
-                          credentialsId("github-access-token")
+                          credentialsId(config == 'test-tekton-client' ? 'github-app-testserver' : 'github-access-token')
                           configuredByUrl(true)
                           repositoryUrl('https://github.com/garethjevans/' + config)
                           repoOwner('garethjevans')
