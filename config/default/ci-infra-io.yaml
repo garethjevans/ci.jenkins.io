@@ -1,3 +1,4 @@
+---
 rbac:
   readSecrets: true
 persistence:
@@ -189,6 +190,7 @@ controller:
                     branchSource {
                       source {
                         github {
+                          id("id-${config}")
                           credentialsId(config == 'test-tekton-client' ? 'github-app-testserver' : 'github-access-token')
                           configuredByUrl(true)
                           repositoryUrl('https://github.com/garethjevans/' + config)
@@ -330,3 +332,4 @@ controller:
       initialDelaySeconds: 240
     readinessProbe:
       initialDelaySeconds: 240
+...        
