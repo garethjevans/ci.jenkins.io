@@ -1,4 +1,3 @@
----
 rbac:
   readSecrets: true
 persistence:
@@ -332,4 +331,3 @@ controller:
       initialDelaySeconds: 240
     readinessProbe:
       initialDelaySeconds: 240
-...
