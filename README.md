@@ -2,6 +2,13 @@
 
 A playground for playing with Jenkins Helm & JCasC
 
+## Prereq
+
+Install an ingress controller
+```
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/cloud/deploy.yaml
+```
+
 ## build
 
 ```sh
