@@ -182,7 +182,7 @@ controller:
                 }
               }
           - script: >
-              ['ci.jenkins.io', 'jenkins-image', 'test-tekton-client'].each { config ->
+              ['ci.jenkins.io', 'jenkins-image', 'test-tekton-client', 'node-example'].each { config ->
                 multibranchPipelineJob(config) {
                   displayName config
                   branchSources {
