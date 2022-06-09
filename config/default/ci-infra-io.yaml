@@ -20,7 +20,7 @@ controller:
     configScripts:
       no-executors: |
         jenkins:
-          numExecutors: 2
+          numExecutors: 0
       matrix-settings: |
         jenkins:
           authorizationStrategy:
@@ -83,8 +83,7 @@ controller:
           - script: >
               def configuration = [
                 [
-                  name        : "Core",
-                  repositories: "test-repo*",
+                  name        : "rawlingsj",
                   excludes    : "",
                   trust       : "TrustPermission"
                 ]
@@ -92,10 +91,11 @@ controller:
 
               configuration.each { jobConfig ->
                 def config = [
-                  displayName: jobConfig.name,
-                  owner      : "garethjevans-test",
-                  excludes   : "",
-                  trust      : "TrustPermission"
+                  displayName : jobConfig.name,
+                  owner       : "rawlingsj",
+                  repositories: "spring-petclinic",
+                  excludes    : "",
+                  trust       : "TrustPermission"
                 ] << jobConfig
                 organizationFolder(config.name) {
                   displayName(config.displayName)
@@ -174,87 +174,6 @@ controller:
                   }
                 }
               }
-          - script: >
-              ['ci.jenkins.io', 'jenkins-image', 'test-tekton-client', 'node-example'].each { config ->
-                multibranchPipelineJob(config) {
-                  displayName config
-                  branchSources {
-                    branchSource {
-                      source {
-                        github {
-                          id("id-${config}")
-                          credentialsId(config == 'test-tekton-client' ? 'github-app-testserver' : 'github-access-token')
-                          configuredByUrl(true)
-                          repositoryUrl('https://github.com/garethjevans/' + config)
-                          repoOwner('garethjevans')
-                          repository(config)
-                        }
-                      }
-                      buildStrategies {
-                        buildAnyBranches {
-                          strategies {
-                            buildChangeRequests {
-                              ignoreTargetOnlyChanges(true)
-                              ignoreUntrustedChanges(true)
-                            }
-                            buildRegularBranches()
-                            buildTags {
-                              atLeastDays("0")
-                              atMostDays("7")
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                  factory {
-                    workflowBranchProjectFactory {
-                      scriptPath('Jenkinsfile')
-                    }
-                  }
-                  orphanedItemStrategy {
-                    discardOldItems {
-                      daysToKeep(1)
-                    }
-                  }
-                  configure { node ->
-                    def traits = node / 'sources' / 'data' / 'jenkins.branch.BranchSource' / 'source' / 'traits'
-                    traits << 'org.jenkinsci.plugins.github__branch__source.TagDiscoveryTrait' {
-                    }
-                    traits << 'org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait' {
-                      strategyId(1)
-                    }
-                    traits << 'org.jenkinsci.plugins.github__branch__source.OriginPullRequestDiscoveryTrait' {
-                      strategyId(1)
-                    }
-                    traits << 'org.jenkinsci.plugins.github__branch__source.ForkPullRequestDiscoveryTrait' {
-                      strategyId(1)
-                      trust(class: 'org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$TrustContributors')
-                    }
-                    traits << 'net.gleske.scmfilter.impl.trait.WildcardSCMHeadFilterTrait' {
-                      includes('main master PR-*')
-                      excludes()
-                      tagIncludes('*')
-                      tagExcludes()
-                    }
-                    traits << 'org.jenkinsci.plugins.github.label.filter.PullRequestLabelsBlackListFilterTrait' {
-                      labels('on-hold ci-skip')
-                    }
-                    traits << 'jenkins.plugins.git.traits.CloneOptionTrait' {
-                      extension(class: 'hudson.plugins.git.extensions.impl.CloneOption') {
-                        shallow(false)
-                        noTags(false)
-                        reference()
-                        depth(0)
-                        honorRefspec(false)
-                      }
-                    }
-                    traits << 'jenkins.plugins.git.traits.LocalBranchTrait' {
-                      // empty
-                    }
-                  }
-                }
-              }
       pipeline-library: |
         unclassified:
           globalLibraries:
@@ -272,7 +191,7 @@ controller:
         unclassified:
           location:
             adminAddress: "nobody@jenkins.io"
-            url: "https://ci.jenkins.io"
+            url: "http://34.149.103.207.nip.io/"
       agent-settings: |
         jenkins:
           clouds:
