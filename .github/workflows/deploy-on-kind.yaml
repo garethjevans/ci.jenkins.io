@@ -4,13 +4,13 @@ on: push
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         kubernetes_version:
-          - "kindest/node:v1.20.0"
-          - "kindest/node:v1.19.1"
-          - "kindest/node:v1.18.8"
-          - "kindest/node:v1.17.11"
-          - "kindest/node:v1.16.15"
+          - "kindest/node:v1.22.9"
+          - "kindest/node:v1.21.12"
+          - "kindest/node:v1.20.15"
+          - "kindest/node:v1.19.16"
 
     runs-on: ubuntu-latest
     steps:
@@ -25,13 +25,14 @@ jobs:
       - name: Setup helmfile
         uses: mamezou-tech/setup-helmfile@v0.7.0
         with:
-          helmfile-version: "v0.138.3"
-          helm-version: "v3.5.2"
+          helmfile-version: "v0.144.0"
+          helm-version: "v3.9.0"
 
       - name: Create Kind Cluster
-        uses: helm/kind-action@v1.1.0
+        uses: helm/kind-action@v1.2.0
         with:
           node_image: ${{ matrix.kubernetes_version }}
+          wait: 120s
 
       - name: Deploy Chart
         run: |

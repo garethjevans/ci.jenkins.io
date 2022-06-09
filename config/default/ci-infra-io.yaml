@@ -5,15 +5,22 @@ persistence:
   size: 100Gi
 controller:
   image: garethjevans/jenkins
-  tag: 0.8.13-2.289.1
+  tag: 0.15.12-2.332.3-jdk11
   imagePullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: "50m"
+      memory: "256Mi"
+    limits:
+      cpu: "2000m"
+      memory: "4096Mi"
   JCasC:
     enabled: true
     defaultConfig: false
     configScripts:
       no-executors: |
         jenkins:
-          numExecutors: 2
+          numExecutors: 0
       matrix-settings: |
         jenkins:
           authorizationStrategy:
@@ -38,26 +45,12 @@ controller:
                   password: "p4ssw0rd"
       misc-jenkins: |
         jenkins:
-          remotingSecurity:
-            enabled: true
           slaveAgentPort: 50000
       system-message: |
         jenkins:
           systemMessage: |
             <div>
-              <h1>About ci.jenkins.io</h1>
-              <p>This instance hosts several <a href="https://plugins.jenkins.io/github-branch-source">GitHub Organization folders</a> organized by subject area.</p>
-              <p>To add continuous integration and PR builds for a Jenkins plugin in the <code>jenkinsci</code> organization,
-              just add a <a href="https://jenkins.io/doc/book/pipeline/jenkinsfile/"><code>Jenkinsfile</code></a> to your repository.
-              You'll likely only need one line:</p>
-              <pre>    buildPlugin()</pre>
-              <p>Learn more:</p>
-              <ul>
-                <li><a href="https://jenkins.io/projects/infrastructure/#jenkins">About the Jenkins infrastructure project</a></li>
-                <li><a href="https://github.com/jenkins-infra/documentation/blob/master/ci.adoc#jenkins-on-jenkins">Infrastructure documentation: ci.jenkins.io</a></li>
-                <li><a href="https://github.com/jenkins-infra/pipeline-library#pipeline-global-library">Infrastructure documentation: Pipeline library</a></li>
-                <li><a href="https://github.com/jenkins-infra/charts/blob/master/config/cijenkinsio/jenkins.yaml">configuration-as-code for ci.jenkins.io</a></li>
-              </ul>
+              <h1>Demo Jenkins Server</h1>
             </div>
       markup-formatter: |
         jenkins:
@@ -90,8 +83,7 @@ controller:
           - script: >
               def configuration = [
                 [
-                  name        : "Core",
-                  repositories: "test-repo*",
+                  name        : "rawlingsj",
                   excludes    : "",
                   trust       : "TrustPermission"
                 ]
@@ -99,10 +91,11 @@ controller:
 
               configuration.each { jobConfig ->
                 def config = [
-                  displayName: jobConfig.name,
-                  owner      : "garethjevans-test",
-                  excludes   : "",
-                  trust      : "TrustPermission"
+                  displayName : jobConfig.name,
+                  owner       : "rawlingsj",
+                  repositories: "spring-petclinic",
+                  excludes    : "",
+                  trust       : "TrustPermission"
                 ] << jobConfig
                 organizationFolder(config.name) {
                   displayName(config.displayName)
@@ -181,87 +174,6 @@ controller:
                   }
                 }
               }
-          - script: >
-              ['ci.jenkins.io', 'jenkins-image', 'test-tekton-client', 'node-example'].each { config ->
-                multibranchPipelineJob(config) {
-                  displayName config
-                  branchSources {
-                    branchSource {
-                      source {
-                        github {
-                          id("id-${config}")
-                          credentialsId(config == 'test-tekton-client' ? 'github-app-testserver' : 'github-access-token')
-                          configuredByUrl(true)
-                          repositoryUrl('https://github.com/garethjevans/' + config)
-                          repoOwner('garethjevans')
-                          repository(config)
-                        }
-                      }
-                      buildStrategies {
-                        buildAnyBranches {
-                          strategies {
-                            buildChangeRequests {
-                              ignoreTargetOnlyChanges(true)
-                              ignoreUntrustedChanges(true)
-                            }
-                            buildRegularBranches()
-                            buildTags {
-                              atLeastDays("0")
-                              atMostDays("7")
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                  factory {
-                    workflowBranchProjectFactory {
-                      scriptPath('Jenkinsfile')
-                    }
-                  }
-                  orphanedItemStrategy {
-                    discardOldItems {
-                      daysToKeep(1)
-                    }
-                  }
-                  configure { node ->
-                    def traits = node / 'sources' / 'data' / 'jenkins.branch.BranchSource' / 'source' / 'traits'
-                    traits << 'org.jenkinsci.plugins.github__branch__source.TagDiscoveryTrait' {
-                    }
-                    traits << 'org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait' {
-                      strategyId(1)
-                    }
-                    traits << 'org.jenkinsci.plugins.github__branch__source.OriginPullRequestDiscoveryTrait' {
-                      strategyId(1)
-                    }
-                    traits << 'org.jenkinsci.plugins.github__branch__source.ForkPullRequestDiscoveryTrait' {
-                      strategyId(1)
-                      trust(class: 'org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$TrustContributors')
-                    }
-                    traits << 'net.gleske.scmfilter.impl.trait.WildcardSCMHeadFilterTrait' {
-                      includes('main master PR-*')
-                      excludes()
-                      tagIncludes('*')
-                      tagExcludes()
-                    }
-                    traits << 'org.jenkinsci.plugins.github.label.filter.PullRequestLabelsBlackListFilterTrait' {
-                      labels('on-hold ci-skip')
-                    }
-                    traits << 'jenkins.plugins.git.traits.CloneOptionTrait' {
-                      extension(class: 'hudson.plugins.git.extensions.impl.CloneOption') {
-                        shallow(false)
-                        noTags(false)
-                        reference()
-                        depth(0)
-                        honorRefspec(false)
-                      }
-                    }
-                    traits << 'jenkins.plugins.git.traits.LocalBranchTrait' {
-                      // empty
-                    }
-                  }
-                }
-              }
       pipeline-library: |
         unclassified:
           globalLibraries:
@@ -279,7 +191,7 @@ controller:
         unclassified:
           location:
             adminAddress: "nobody@jenkins.io"
-            url: "https://ci.jenkins.io"
+            url: "http://34.149.103.207.nip.io/"
       agent-settings: |
         jenkins:
           clouds:
@@ -309,7 +221,7 @@ controller:
                         resourceRequestMemory: "512Mi"
                         args: 1d
                         alwaysPullImage: true
-  overwritePlugins: true
+  overwritePlugins: false
   installPlugins: false
   sidecars:
     configAutoReload:
@@ -324,10 +236,12 @@ controller:
           value: "60"
   ingress:
     enabled: true
+    apiVersion: "networking.k8s.io/v1"
   probes:
     startupProbe:
-      initialDelaySeconds: 240
+      initialDelaySeconds: 500
     livenessProbe:
-      initialDelaySeconds: 240
+      initialDelaySeconds: 500
     readinessProbe:
-      initialDelaySeconds: 240
+      initialDelaySeconds: 500
+
