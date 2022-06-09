@@ -5,8 +5,15 @@ persistence:
   size: 100Gi
 controller:
   image: garethjevans/jenkins
-  tag: 0.15.9-2.332.3-jdk11
+  tag: 0.15.10-2.332.3-jdk11
   imagePullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: "50m"
+      memory: "256Mi"
+    limits:
+      cpu: "2000m"
+      memory: "4096Mi"
   JCasC:
     enabled: true
     defaultConfig: false
@@ -38,14 +45,12 @@ controller:
                   password: "p4ssw0rd"
       misc-jenkins: |
         jenkins:
-          remotingSecurity:
-            enabled: true
           slaveAgentPort: 50000
       system-message: |
         jenkins:
           systemMessage: |
             <div>
-              <h1>About ci.jenkins.io</h1>
+              <h1>Demo Jenkins Server</h1>
             </div>
       markup-formatter: |
         jenkins:
@@ -312,10 +317,12 @@ controller:
           value: "60"
   ingress:
     enabled: true
+    apiVersion: "networking.k8s.io/v1"
   probes:
     startupProbe:
-      initialDelaySeconds: 240
+      initialDelaySeconds: 500
     livenessProbe:
-      initialDelaySeconds: 240
+      initialDelaySeconds: 500
     readinessProbe:
-      initialDelaySeconds: 240
+      initialDelaySeconds: 500
+
