@@ -4,6 +4,7 @@ on: push
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         kubernetes_version:
           - "kindest/node:v1.22.9"
