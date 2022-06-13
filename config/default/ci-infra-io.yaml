@@ -221,6 +221,39 @@ controller:
                         resourceRequestMemory: "512Mi"
                         args: 1d
                         alwaysPullImage: true
+                  - name: default
+                    label: maven
+                    nodeSelector: "kubernetes.io/os=linux"
+                    containers:
+                      - name: jnlp
+                        image: "jenkins/inbound-agent:latest-jdk11"
+                        resourceLimitCpu: "500m"
+                        resourceLimitMemory: "512Mi"
+                        resourceRequestCpu: "500m"
+                        resourceRequestMemory: "512Mi"
+                        args: 1d
+                        alwaysPullImage: true
+                      - name: maven
+                        image: "maven:3.8-eclipse-temurin-11-alpine"
+                        resourceLimitCpu: "500m"
+                        resourceLimitMemory: "512Mi"
+                        resourceRequestCpu: "500m"
+                        resourceRequestMemory: "512Mi"
+                        args: 1d
+                        alwaysPullImage: true
+                      - name: helm
+                        image: "alpine/helm:3.9.0"
+                        resourceLimitCpu: "500m"
+                        resourceLimitMemory: "512Mi"
+                        resourceRequestCpu: "500m"
+                        resourceRequestMemory: "512Mi"
+                        args: 1d
+                        alwaysPullImage: true
+
+
+
+
+
   overwritePlugins: false
   installPlugins: false
   sidecars:
