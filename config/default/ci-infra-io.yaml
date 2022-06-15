@@ -262,7 +262,7 @@ controller:
                         alwaysPullImage: false
                         ttyEnabled: false
                         envVars:
-                          - KeyValueEnvVar:
+                          - envVar:
                               key: XDG_CONFIG_HOME
                               value: /secrets
                     volumes:
