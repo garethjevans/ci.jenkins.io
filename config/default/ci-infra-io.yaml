@@ -26,15 +26,15 @@ controller:
           authorizationStrategy:
             globalMatrix:
               permissions:
-                - "Overall/Administer:admin"
-                - "Credentials/Create:admin"
-                - "Overall/SystemRead:authenticated"
-                - "Overall/Read:authenticated"
-                - "Agent/ExtendedRead:authenticated"
-                - "Job/ExtendedRead:authenticated"
-                - "Overall/Read:anonymous"
-                - "Job/Read:anonymous"
-                - "View/Read:anonymous"
+                - "USER:Overall/Administer:admin"
+                - "USER:Credentials/Create:admin"
+                - "GROUP:Overall/SystemRead:authenticated"
+                - "GROUP:Overall/Read:authenticated"
+                - "GROUP:Agent/ExtendedRead:authenticated"
+                - "GROUP:Job/ExtendedRead:authenticated"
+                - "GROUP:Overall/Read:anonymous"
+                - "GROUP:Job/Read:anonymous"
+                - "GROUP:View/Read:anonymous"
       security-realm: |
         jenkins:
           securityRealm:
