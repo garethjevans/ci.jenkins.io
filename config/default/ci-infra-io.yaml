@@ -83,7 +83,7 @@ controller:
           - script: >
               def configuration = [
                 [
-                  name        : "rawlingsj",
+                  name        : "rawlingsj-org",
                   excludes    : "",
                   trust       : "TrustPermission"
                 ]
@@ -92,7 +92,7 @@ controller:
               configuration.each { jobConfig ->
                 def config = [
                   displayName : jobConfig.name,
-                  owner       : "rawlingsj",
+                  owner       : "rawlingsj-org",
                   repositories: "spring-petclinic",
                   excludes    : "",
                   trust       : "TrustPermission"
