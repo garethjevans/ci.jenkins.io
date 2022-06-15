@@ -26,15 +26,15 @@ controller:
           authorizationStrategy:
             globalMatrix:
               permissions:
-                - "Overall/Administer:admin"
-                - "Credentials/Create:admin"
-                - "Overall/SystemRead:authenticated"
-                - "Overall/Read:authenticated"
-                - "Agent/ExtendedRead:authenticated"
-                - "Job/ExtendedRead:authenticated"
-                - "Overall/Read:anonymous"
-                - "Job/Read:anonymous"
-                - "View/Read:anonymous"
+                - "USER:Overall/Administer:admin"
+                - "USER:Credentials/Create:admin"
+                - "GROUP:Overall/SystemRead:authenticated"
+                - "GROUP:Overall/Read:authenticated"
+                - "GROUP:Agent/ExtendedRead:authenticated"
+                - "GROUP:Job/ExtendedRead:authenticated"
+                - "GROUP:Overall/Read:anonymous"
+                - "GROUP:Job/Read:anonymous"
+                - "GROUP:View/Read:anonymous"
       security-realm: |
         jenkins:
           securityRealm:
@@ -83,7 +83,7 @@ controller:
           - script: >
               def configuration = [
                 [
-                  name        : "rawlingsj",
+                  name        : "rawlingsj-org",
                   excludes    : "",
                   trust       : "TrustPermission"
                 ]
@@ -92,7 +92,7 @@ controller:
               configuration.each { jobConfig ->
                 def config = [
                   displayName : jobConfig.name,
-                  owner       : "rawlingsj",
+                  owner       : "rawlingsj-org",
                   repositories: "spring-petclinic",
                   excludes    : "",
                   trust       : "TrustPermission"
@@ -210,7 +210,8 @@ controller:
                   - key: "jenkins/jenkins-agent"
                     value: "true"
                 templates:
-                  - name: jnlp
+                  - name: default
+                    label: maven
                     nodeSelector: "kubernetes.io/os=linux"
                     containers:
                       - name: jnlp
@@ -219,8 +220,63 @@ controller:
                         resourceLimitMemory: "512Mi"
                         resourceRequestCpu: "500m"
                         resourceRequestMemory: "512Mi"
-                        args: 1d
                         alwaysPullImage: true
+                      - name: maven
+                        image: "maven:3.8-eclipse-temurin-11-alpine"
+                        resourceLimitCpu: "1000m"
+                        resourceLimitMemory: "1024Mi"
+                        resourceRequestCpu: "500m"
+                        resourceRequestMemory: "512Mi"
+                        args: 1d
+                        command: sleep
+                        alwaysPullImage: false
+                        ttyEnabled: false
+                      - name: helm
+                        image: "alpine/helm:3.9.0"
+                        resourceLimitCpu: "500m"
+                        resourceLimitMemory: "512Mi"
+                        resourceRequestCpu: "500m"
+                        resourceRequestMemory: "512Mi"
+                        args: 1d
+                        command: sleep
+                        alwaysPullImage: false
+                        ttyEnabled: false
+                      - name: kaniko
+                        image: "gcr.io/kaniko-project/executor:v1.6.0-debug"
+                        resourceLimitCpu: "500m"
+                        resourceLimitMemory: "512Mi"
+                        resourceRequestCpu: "500m"
+                        resourceRequestMemory: "512Mi"
+                        args: 1d
+                        command: sleep
+                        alwaysPullImage: true
+                        ttyEnabled: false
+                      - name: git
+                        image: "bitnami/git:2.33.0"
+                        resourceLimitCpu: "500m"
+                        resourceLimitMemory: "512Mi"
+                        resourceRequestCpu: "500m"
+                        resourceRequestMemory: "512Mi"
+                        args: 1d
+                        command: sleep
+                        alwaysPullImage: false
+                        ttyEnabled: false
+                        envVars:
+                          - envVar:
+                              key: XDG_CONFIG_HOME
+                              value: /secrets
+                    volumes:
+                      - persistentVolumeClaim:
+                          mountPath: "/root/.m2"
+                          claimName: m2
+                          readOnly: false
+                      - secretVolume:  
+                          mountPath: "/secrets/docker"
+                          secretName: "docker-config"
+                      - secretVolume:  
+                          mountPath: "/secrets/git"
+                          secretName: "github-access-token"
+
   overwritePlugins: false
   installPlugins: false
   sidecars:
