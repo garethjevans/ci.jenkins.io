@@ -1,7 +1,7 @@
 repositories:
-  #  - name: kubernetes-external-secrets
-  #    url: https://external-secrets.github.io/kubernetes-external-secrets
+  - name: external-secrets
+    url: https://charts.external-secrets.io
   - name: jenkins
     url: https://charts.jenkins.io
-  #  - name: jenkins-infra
-  #    url: https://jenkins-infra.github.io/captain-hook
+  - name: sonatype
+    url: https://sonatype.github.io/helm3-charts/
