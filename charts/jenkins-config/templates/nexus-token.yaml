@@ -1,0 +1,27 @@
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: nexus-token
+  namespace: jenkins
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: gsm
+  target:
+    name: nexus-token
+    creationPolicy: Owner
+    template:
+      metadata:
+        labels:
+          "jenkins.io/credentials-type": "usernamePassword"
+        annotations:
+          "jenkins.io/credentials-description": "nexus access token"
+      data:
+        username: admin
+        password: >-
+          {{ printf "{{ .password | toString }}" }}
+  data:
+  - secretKey: password
+    remoteRef:
+      key: nexus-token
