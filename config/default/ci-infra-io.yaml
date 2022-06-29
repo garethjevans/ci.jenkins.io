@@ -200,7 +200,7 @@ controller:
         unclassified:
           location:
             adminAddress: "nobody@jenkins.io"
-            url: "http://34.149.103.207.nip.io/"
+            url: "https://jenkins.104.154.50.208.nip.io/"
       agent-settings: |
         jenkins:
           clouds:
@@ -295,6 +295,13 @@ controller:
   ingress:
     enabled: true
     apiVersion: "networking.k8s.io/v1"
+    hostName: jenkins.104.154.50.208.nip.io
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+    tls:
+      - secretName: tls-jenkins-p
+        hosts:
+          - jenkins.104.154.50.208.nip.io
   probes:
     startupProbe:
       initialDelaySeconds: 500
