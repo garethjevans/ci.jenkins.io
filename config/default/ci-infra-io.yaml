@@ -214,8 +214,6 @@ controller:
                 podRetention: "Never"
                 serverUrl: "https://kubernetes.default"
                 podLabels:
-                  # Required to be jenkins/<helm-release>-jenkins-slave as definede here
-                  # https://github.com/helm/charts/blob/ef0d749132ecfa61b2ea47ccacafeaf5cf1d3d77/stable/jenkins/templates/jenkins-master-networkpolicy.yaml#L27
                   - key: "jenkins/jenkins-agent"
                     value: "true"
                 templates:
@@ -279,25 +277,20 @@ controller:
                           mountPath: "/root/.m2"
                           claimName: m2
                           readOnly: false
-                      - secretVolume:  
+                      - secretVolume:
                           mountPath: "/secrets/docker"
                           secretName: "docker-config"
-                      - secretVolume:  
+                      - secretVolume:
                           mountPath: "/secrets/git"
                           secretName: "github-access-token"
-
   overwritePlugins: true
   installPlugins: false
   sidecars:
     configAutoReload:
       env:
-        # https://github.com/kiwigrid/k8s-sidecar#configuration-environment-variables
         - name: METHOD
-          # Polling mode (instead of watching kube API)
           value: "SLEEP"
-        # https://github.com/kiwigrid/k8s-sidecar#configuration-environment-variables
         - name: SLEEP_TIME
-          # Time in seconds between two polls
           value: "60"
   ingress:
     enabled: true
