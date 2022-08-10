@@ -8,7 +8,7 @@ helmDefaults:
 releases:
   - name: nexus
     chart: sonatype/nexus-repository-manager
-    version: 39.0.0
+    version: 41.0.0
     namespace: nexus
     values:
       - "../config/default/nexus.yaml"
