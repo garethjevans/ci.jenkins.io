@@ -7,10 +7,10 @@ jobs:
       fail-fast: false
       matrix:
         kubernetes_version:
-          - "kindest/node:v1.22.9"
-          - "kindest/node:v1.21.12"
-          - "kindest/node:v1.20.15"
-          - "kindest/node:v1.19.16"
+          - "kindest/node:v1.25.0"
+          - "kindest/node:v1.24.4"
+          - "kindest/node:v1.23.10"
+          - "kindest/node:v1.22.13"
 
     runs-on: ubuntu-latest
     steps:
