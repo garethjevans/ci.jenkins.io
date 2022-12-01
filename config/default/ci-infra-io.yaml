@@ -40,9 +40,6 @@ controller:
           securityRealm:
             local:
               allowsSignup: false
-              users:
-                - id: "admin"
-                  password: "p4ssw0rd"
       misc-jenkins: |
         jenkins:
           slaveAgentPort: 50000
@@ -101,7 +98,7 @@ controller:
                 def config = [
                   displayName : jobConfig.name,
                   owner       : "rawlingsj-org",
-                  repositories: "spring-petclinic",
+                  repositories: "spring-petclinic spring-accelerator",
                   excludes    : "",
                   trust       : "TrustPermission"
                 ] << jobConfig
