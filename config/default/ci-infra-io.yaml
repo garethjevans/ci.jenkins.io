@@ -196,7 +196,7 @@ controller:
         unclassified:
           location:
             adminAddress: "nobody@jenkins.io"
-            url: "http://jenkins.104.154.50.208.nip.io/"
+            url: "https://jenkins.104.154.50.208.nip.io/"
       agent-settings: |
         jenkins:
           clouds:
