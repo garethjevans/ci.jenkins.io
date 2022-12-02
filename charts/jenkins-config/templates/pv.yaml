@@ -1,0 +1,35 @@
+{{- if .Values.m2.enabled }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+{{- if .Values.m2.annotations }}
+  annotations:
+{{ toYaml .Values.m2.annotations | indent 4 }}
+{{- end }}
+  name: m2
+  namespace: jenkins
+  labels:
+    "app.kubernetes.io/name": 'jenkins'
+    {{- if .Values.renderHelmLabels }}
+    "helm.sh/chart": "jenkins-config"
+    {{- end }}
+    "app.kubernetes.io/managed-by": "{{ .Release.Service }}"
+    "app.kubernetes.io/instance": "{{ .Release.Name }}"
+    "app.kubernetes.io/component": "jenkins"
+{{- if .Values.m2.labels }}
+{{ toYaml .Values.m2.labels | indent 4 }}
+{{- end }}
+spec:
+  accessModes:
+    - {{ .Values.m2.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.m2.size | quote }}
+{{- if .Values.m2.storageClass }}
+{{- if (eq "-" .Values.m2.storageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: "{{ .Values.m2.storageClass }}"
+{{- end }}
+{{- end }}
+{{- end }}
