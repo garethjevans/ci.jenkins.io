@@ -196,7 +196,7 @@ controller:
         unclassified:
           location:
             adminAddress: "nobody@jenkins.io"
-            url: "https://jenkins.104.154.50.208.nip.io/"
+            url: "http://jenkins.104.154.50.208.nip.io/"
       agent-settings: |
         jenkins:
           clouds:
@@ -234,51 +234,17 @@ controller:
                         command: sleep
                         alwaysPullImage: false
                         ttyEnabled: false
-                      - name: helm
-                        image: "alpine/helm:3.9.0"
-                        resourceLimitCpu: "500m"
-                        resourceLimitMemory: "512Mi"
-                        resourceRequestCpu: "500m"
-                        resourceRequestMemory: "512Mi"
-                        args: 1d
-                        command: sleep
-                        alwaysPullImage: false
-                        ttyEnabled: false
-                      - name: kaniko
-                        image: "gcr.io/kaniko-project/executor:v1.6.0-debug"
-                        resourceLimitCpu: "500m"
-                        resourceLimitMemory: "512Mi"
-                        resourceRequestCpu: "500m"
-                        resourceRequestMemory: "512Mi"
-                        args: 1d
-                        command: sleep
-                        alwaysPullImage: true
-                        ttyEnabled: false
-                      - name: git
-                        image: "bitnami/git:2.33.0"
-                        resourceLimitCpu: "500m"
-                        resourceLimitMemory: "512Mi"
-                        resourceRequestCpu: "500m"
-                        resourceRequestMemory: "512Mi"
-                        args: 1d
-                        command: sleep
-                        alwaysPullImage: false
-                        ttyEnabled: false
-                        envVars:
-                          - envVar:
-                              key: XDG_CONFIG_HOME
-                              value: /secrets
                     volumes:
                       - persistentVolumeClaim:
                           mountPath: "/root/.m2"
                           claimName: m2
                           readOnly: false
-                      - secretVolume:
-                          mountPath: "/secrets/docker"
-                          secretName: "docker-config"
-                      - secretVolume:
-                          mountPath: "/secrets/git"
-                          secretName: "github-access-token"
+                            #                      - secretVolume:
+                            #                          mountPath: "/secrets/docker"
+                            #                          secretName: "docker-config"
+                            #                      - secretVolume:
+                            #                          mountPath: "/secrets/git"
+                            #                          secretName: "github-access-token"
   overwritePlugins: true
   installPlugins: false
   sidecars:
