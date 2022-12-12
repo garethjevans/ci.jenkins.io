@@ -24,7 +24,7 @@ jobs:
         uses: azure/setup-kubectl@v1
 
       - name: Setup helmfile
-        uses: mamezou-tech/setup-helmfile@v0.7.0
+        uses: mamezou-tech/setup-helmfile@v1.2.0
         with:
           helmfile-version: "v0.144.0"
           helm-version: "v3.9.0"
