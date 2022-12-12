@@ -1,5 +1,5 @@
 ---
-name: Update CLI
+name: Update Jenkins Version
 
 on:
   workflow_dispatch:
@@ -14,17 +14,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Install UpdateCLI
+        uses: updatecli/updatecli-action@v2
+
       - name: Update CLI
         run: |
-          curl -sSfL -o updatecli.tar.gz https://github.com/updatecli/updatecli/releases/latest/download/updatecli_Linux_x86_64.tar.gz
-          tar xvfz updatecli.tar.gz
-          rm updatecli.tar.gz
-          rm LICENSE
-          rm README.adoc
-          chmod +x ./updatecli
-          ./updatecli version
-          ./updatecli apply --debug --push=false --config ./updateCli/updatecli.d --values ./updateCli/values.github-action.yaml
-          rm updatecli
+          updatecli apply --debug --push=false --config .updatecli/jenkins --values .updatecli/values.github-action.yaml
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
