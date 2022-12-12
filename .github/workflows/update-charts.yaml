@@ -2,7 +2,6 @@ name: Update Charts
 
 on:
   workflow_dispatch:
-  pull_request:
   schedule:
     - cron: "5 * * * *"
 
@@ -39,6 +38,7 @@ jobs:
       uses: peter-evans/create-pull-request@v4
       if: github.event_name != 'pull_request'
       with:
+        token: ${{ secrets.ACCESS_TOKEN }}
         commit-message: 'chore: bumped chart versions'
         signoff: false
         title: 'chore: bumped chart versions'
