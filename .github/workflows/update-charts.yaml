@@ -36,7 +36,7 @@ jobs:
         echo ${{ steps.updatecli.outputs.stdout }}
 
     - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v4
       if: github.event_name != 'pull_request'
       with:
         commit-message: 'chore: bumped chart versions'
