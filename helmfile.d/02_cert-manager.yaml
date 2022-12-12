@@ -1,0 +1,19 @@
+---
+helmDefaults:
+  atomic: false
+  force: false
+  timeout: 300
+  wait: true
+
+releases:
+  - name: cert-manager
+    chart: jetstack/cert-manager
+    version: 1.10.1
+    namespace: cert-manager
+    values:
+      - "../config/default/cert-manager.yaml"
+    set:
+      - name: namespace
+        value: cert-manager
+      - name: installCRDs
+        value: true
