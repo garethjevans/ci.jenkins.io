@@ -23,7 +23,7 @@ jobs:
     - name: Run UpdateCLI
       id: updatecli
       run: |
-        output=$(updatecli apply --push=false)
+        output=$(updatecli apply --push=false --config .updatecli/helm-charts --values .updatecli/values.github-action.yaml)
         echo $output
         output="${output//$'\n'/\\n}"
         
