@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install Kubectl
-        uses: azure/setup-kubectl@v1
+        uses: azure/setup-kubectl@v3
 
       - name: Setup helmfile
         uses: mamezou-tech/setup-helmfile@v1.2.0
