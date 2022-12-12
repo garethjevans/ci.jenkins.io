@@ -1,14 +1,12 @@
----
 helmDefaults:
   atomic: false
   force: false
   timeout: 600
   wait: true
-
 releases:
   - name: jenkins
     chart: jenkins/jenkins
-    version: 4.2.5
+    version: 4.2.17
     namespace: jenkins
     values:
       - "../config/default/ci-infra-io.yaml"
