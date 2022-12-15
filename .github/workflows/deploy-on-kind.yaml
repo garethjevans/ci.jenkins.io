@@ -11,8 +11,6 @@ jobs:
           - "kindest/node:v1.25.0"
           - "kindest/node:v1.24.4"
           - "kindest/node:v1.23.10"
-          - "kindest/node:v1.22.13"
-          - "kindest/node:v1.21.12"
 
     runs-on: ubuntu-latest
     steps:
