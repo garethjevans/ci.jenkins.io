@@ -7,3 +7,5 @@ repositories:
     url: https://sonatype.github.io/helm3-charts/
   - name: jetstack
     url: https://charts.jetstack.io
+  - name: crossplane-stable
+    url: https://charts.crossplane.io/stable
