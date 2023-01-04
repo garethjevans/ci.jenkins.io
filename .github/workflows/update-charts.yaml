@@ -22,17 +22,9 @@ jobs:
     - name: Run UpdateCLI
       id: updatecli
       run: |
-        output=$(updatecli apply --push=false --config .updatecli/helm-charts --values .updatecli/values.github-action.yaml)
-        echo $output
-        output="${output//$'\n'/\\n}"
-        
-        echo "stdout=$output" >> $GITHUB_OUTPUT
+        updatecli apply --push=false --config .updatecli/helm-charts --values .updatecli/values.github-action.yaml
       env:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-
-    - name: Display Body
-      run: |
-        echo ${{ steps.updatecli.outputs.stdout }}
 
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v4
@@ -41,5 +33,6 @@ jobs:
         token: ${{ secrets.ACCESS_TOKEN }}
         commit-message: 'chore: bumped chart versions'
         signoff: false
+        branch: update-charts
         title: 'chore: bumped chart versions'
         body: ${{ steps.updatecli.outputs.stdout }} 
