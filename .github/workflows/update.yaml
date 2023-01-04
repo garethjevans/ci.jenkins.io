@@ -33,3 +33,4 @@ jobs:
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
           signoff: false
           title: 'chore(deps): update jenkins version'
+          branch: update-jenkins
