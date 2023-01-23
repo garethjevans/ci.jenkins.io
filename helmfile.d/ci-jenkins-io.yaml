@@ -6,7 +6,7 @@ helmDefaults:
 releases:
   - name: jenkins
     chart: jenkins/jenkins
-    version: 4.2.21
+    version: 4.3.0
     namespace: jenkins
     values:
       - "../config/default/ci-infra-io.yaml"
