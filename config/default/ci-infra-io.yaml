@@ -5,7 +5,7 @@ persistence:
     size: 100Gi
 controller:
     image: garethjevans/jenkins
-    tag: 0.21.38-2.375.3-jdk11
+    tag: 0.21.39-2.375.3-jdk11
     imagePullPolicy: IfNotPresent
     resources:
         requests:
