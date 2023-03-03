@@ -1,304 +1,304 @@
 rbac:
-    readSecrets: true
+  readSecrets: true
 persistence:
-    enabled: true
-    size: 100Gi
+  enabled: true
+  size: 100Gi
 controller:
-    image: garethjevans/jenkins
-    tag: 0.21.42-2.375.3-jdk11
-    imagePullPolicy: IfNotPresent
-    resources:
-        requests:
-            cpu: "50m"
-            memory: "256Mi"
-        limits:
-            cpu: "2000m"
-            memory: "4096Mi"
-    JCasC:
-        enabled: true
-        defaultConfig: false
-        configScripts:
-            no-executors: |
-                jenkins:
-                  numExecutors: 0
-            matrix-settings: |
-                jenkins:
-                  authorizationStrategy:
-                    globalMatrix:
-                      permissions:
-                        - "USER:Overall/Administer:admin"
-                        - "USER:Credentials/Create:admin"
-                        - "GROUP:Overall/SystemRead:authenticated"
-                        - "GROUP:Overall/Read:authenticated"
-                        - "GROUP:Agent/ExtendedRead:authenticated"
-                        - "GROUP:Job/ExtendedRead:authenticated"
-                        - "GROUP:Overall/Read:anonymous"
-                        - "GROUP:Job/Read:anonymous"
-                        - "GROUP:View/Read:anonymous"
-            security-realm: |
-                jenkins:
-                  securityRealm:
-                    local:
-                      allowsSignup: false
-                      users:
-                        - id: "admin"
-                          password: "p4ssw0rd"
-            misc-jenkins: |
-                jenkins:
-                  slaveAgentPort: 50000
-            system-message: |
-                jenkins:
-                  systemMessage: |
-                    <div>
-                      <h1>Demo Jenkins Server</h1>
-                    </div>
-            system-settings: |
-                unclassified:
-                  defaultFolderConfiguration:
-                    # Keep healthMetrics an empty list to ensure weather is disabled
-                    healthMetrics: []
-                jenkins:
-                  quietPeriod: 0 # No need to wait between build scheduling
-                  disabledAdministrativeMonitors:
-                    - "jenkins.security.QueueItemAuthenticatorMonitor"
-            markup-formatter: |
-                jenkins:
-                  markupFormatter:
-                    rawHtml:
-                      disableSyntaxHighlighting: false
-            crumb-issuer: |
-                jenkins:
-                  crumbIssuer:
-                    standard:
-                      excludeClientIPFromCrumb: true
-            misc-security: |
-                security:
-                  apiToken:
-                    creationOfLegacyTokenEnabled: false
-                    tokenGenerationOnCreationEnabled: false
-                    usageStatisticsEnabled: true
-            misc-unclassified: |
-                unclassified:
-                  gitSCM:
-                    createAccountBasedOnEmail: false
-                    globalConfigEmail: "oscar@example.com"
-                    globalConfigName: "oscar"
-                  pollSCM:
-                    pollingThreadCount: 10
-                  timestamper:
-                    allPipelines: true
-            jobs-settings: |
-                jobs:
-                  - script: >
-                      def configuration = [
-                        [
-                          name        : "rawlingsj-org",
-                          excludes    : "",
-                          trust       : "TrustPermission"
-                        ]
-                      ]
+  image: garethjevans/jenkins
+  tag: 0.21.43-2.375.3-jdk11
+  imagePullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: "50m"
+      memory: "256Mi"
+    limits:
+      cpu: "2000m"
+      memory: "4096Mi"
+  JCasC:
+    enabled: true
+    defaultConfig: false
+    configScripts:
+      no-executors: |
+        jenkins:
+          numExecutors: 0
+      matrix-settings: |
+        jenkins:
+          authorizationStrategy:
+            globalMatrix:
+              permissions:
+                - "USER:Overall/Administer:admin"
+                - "USER:Credentials/Create:admin"
+                - "GROUP:Overall/SystemRead:authenticated"
+                - "GROUP:Overall/Read:authenticated"
+                - "GROUP:Agent/ExtendedRead:authenticated"
+                - "GROUP:Job/ExtendedRead:authenticated"
+                - "GROUP:Overall/Read:anonymous"
+                - "GROUP:Job/Read:anonymous"
+                - "GROUP:View/Read:anonymous"
+      security-realm: |
+        jenkins:
+          securityRealm:
+            local:
+              allowsSignup: false
+              users:
+                - id: "admin"
+                  password: "p4ssw0rd"
+      misc-jenkins: |
+        jenkins:
+          slaveAgentPort: 50000
+      system-message: |
+        jenkins:
+          systemMessage: |
+            <div>
+              <h1>Demo Jenkins Server</h1>
+            </div>
+      system-settings: |
+        unclassified:
+          defaultFolderConfiguration:
+            # Keep healthMetrics an empty list to ensure weather is disabled
+            healthMetrics: []
+        jenkins:
+          quietPeriod: 0 # No need to wait between build scheduling
+          disabledAdministrativeMonitors:
+            - "jenkins.security.QueueItemAuthenticatorMonitor"
+      markup-formatter: |
+        jenkins:
+          markupFormatter:
+            rawHtml:
+              disableSyntaxHighlighting: false
+      crumb-issuer: |
+        jenkins:
+          crumbIssuer:
+            standard:
+              excludeClientIPFromCrumb: true
+      misc-security: |
+        security:
+          apiToken:
+            creationOfLegacyTokenEnabled: false
+            tokenGenerationOnCreationEnabled: false
+            usageStatisticsEnabled: true
+      misc-unclassified: |
+        unclassified:
+          gitSCM:
+            createAccountBasedOnEmail: false
+            globalConfigEmail: "oscar@example.com"
+            globalConfigName: "oscar"
+          pollSCM:
+            pollingThreadCount: 10
+          timestamper:
+            allPipelines: true
+      jobs-settings: |
+        jobs:
+          - script: >
+              def configuration = [
+                [
+                  name        : "rawlingsj-org",
+                  excludes    : "",
+                  trust       : "TrustPermission"
+                ]
+              ]
 
-                      configuration.each { jobConfig ->
-                        def config = [
-                          displayName : jobConfig.name,
-                          owner       : "rawlingsj-org",
-                          repositories: "spring-petclinic",
-                          excludes    : "",
-                          trust       : "TrustPermission"
-                        ] << jobConfig
-                        organizationFolder(config.name) {
-                          displayName(config.displayName)
-                          organizations {
-                            github {
-                              repoOwner(config.owner)
-                              apiUri("https://api.github.com")
-                              credentialsId("github-access-token")
-                              traits {
-                                gitHubTagDiscovery()
-                                cloneOptionTrait {
-                                  extension {
-                                    shallow(false)
-                                    noTags(false)
-                                    reference('')
-                                    timeout(10)
-                                    honorRefspec(false)
-                                  }
-                                }
-                              }
-                            }
-                          }
-                          projectFactories {
-                            workflowMultiBranchProjectFactory {
-                              scriptPath("Jenkinsfile")
-                            }
-                          }
-                          orphanedItemStrategy {
-                            discardOldItems {
-                              daysToKeep(1)
-                            }
-                          }
-                          buildStrategies {
-                            buildAnyBranches {
-                              strategies {
-                                buildChangeRequests {
-                                  ignoreTargetOnlyChanges(true)
-                                  ignoreUntrustedChanges(true)
-                                }
-                                buildRegularBranches()
-                                buildTags {
-                                  atLeastDays("0")
-                                  atMostDays("7")
-                                }
-                              }
-                            }
-                          }
-                          configure { node ->
-                            def traits = node / navigators / 'org.jenkinsci.plugins.github__branch__source.GitHubSCMNavigator' / traits
-                            traits << 'jenkins.scm.impl.trait.WildcardSCMSourceFilterTrait' {
-                              includes(config.repositories)
-                              excludes(config.excludes)
-                            }
-                            traits << 'org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait' {
-                              strategyId(1)
-                            }
-                            traits << 'org.jenkinsci.plugins.github__branch__source.OriginPullRequestDiscoveryTrait' {
-                              strategyId(1)
-                            }
-                            traits << 'org.jenkinsci.plugins.github__branch__source.ForkPullRequestDiscoveryTrait' {
-                              strategyId(1)
-                              trust(class: 'org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$' + config.trust)
-                            }
-                            traits << 'net.gleske.scmfilter.impl.trait.WildcardSCMHeadFilterTrait' {
-                              includes('main master PR-*')
-                              excludes()
-                              tagIncludes('*')
-                              tagExcludes()
-                            }
-                            traits << 'org.jenkinsci.plugins.github.label.filter.PullRequestLabelsBlackListFilterTrait' {
-                              labels('on-hold ci-skip')
-                            }
-                            traits << 'jenkins.plugins.git.traits.LocalBranchTrait' {
-                              // empty
-                            }
+              configuration.each { jobConfig ->
+                def config = [
+                  displayName : jobConfig.name,
+                  owner       : "rawlingsj-org",
+                  repositories: "spring-petclinic",
+                  excludes    : "",
+                  trust       : "TrustPermission"
+                ] << jobConfig
+                organizationFolder(config.name) {
+                  displayName(config.displayName)
+                  organizations {
+                    github {
+                      repoOwner(config.owner)
+                      apiUri("https://api.github.com")
+                      credentialsId("github-access-token")
+                      traits {
+                        gitHubTagDiscovery()
+                        cloneOptionTrait {
+                          extension {
+                            shallow(false)
+                            noTags(false)
+                            reference('')
+                            timeout(10)
+                            honorRefspec(false)
                           }
                         }
                       }
-            pipeline-library: |
-                unclassified:
-                  globalLibraries:
-                    libraries:
-                      - defaultVersion: "master"
-                        implicit: true
-                        name: "pipeline-library"
-                        retriever:
-                          modernSCM:
-                            scm:
-                              git:
-                                id: "github-access-token"
-                                remote: "https://github.com/garethjevans/pipeline-library.git"
-            location: |
-                unclassified:
-                  location:
-                    adminAddress: "nobody@jenkins.io"
-                    url: "http://34.149.103.207.nip.io/"
-            agent-settings: |
-                jenkins:
-                  clouds:
-                    - kubernetes:
-                        containerCapStr: "100"
-                        jenkinsUrl: "http://jenkins:8080"
-                        maxRequestsPerHostStr: "300"
-                        webSocket: true
-                        name: "kubernetes"
-                        namespace: "jenkins"
-                        podRetention: "Never"
-                        serverUrl: "https://kubernetes.default"
-                        podLabels:
-                          - key: "jenkins/jenkins-agent"
-                            value: "true"
-                        templates:
-                          - name: default
-                            label: maven
-                            nodeSelector: "kubernetes.io/os=linux"
-                            containers:
-                              - name: jnlp
-                                image: "jenkins/inbound-agent:latest-jdk11"
-                                resourceLimitCpu: "500m"
-                                resourceLimitMemory: "512Mi"
-                                resourceRequestCpu: "500m"
-                                resourceRequestMemory: "512Mi"
-                                alwaysPullImage: true
-                              - name: maven
-                                image: "maven:3.8-eclipse-temurin-11-alpine"
-                                resourceLimitCpu: "1000m"
-                                resourceLimitMemory: "1024Mi"
-                                resourceRequestCpu: "500m"
-                                resourceRequestMemory: "512Mi"
-                                args: 1d
-                                command: sleep
-                                alwaysPullImage: false
-                                ttyEnabled: false
-                              - name: helm
-                                image: "alpine/helm:3.9.0"
-                                resourceLimitCpu: "500m"
-                                resourceLimitMemory: "512Mi"
-                                resourceRequestCpu: "500m"
-                                resourceRequestMemory: "512Mi"
-                                args: 1d
-                                command: sleep
-                                alwaysPullImage: false
-                                ttyEnabled: false
-                              - name: kaniko
-                                image: "gcr.io/kaniko-project/executor:v1.6.0-debug"
-                                resourceLimitCpu: "500m"
-                                resourceLimitMemory: "512Mi"
-                                resourceRequestCpu: "500m"
-                                resourceRequestMemory: "512Mi"
-                                args: 1d
-                                command: sleep
-                                alwaysPullImage: true
-                                ttyEnabled: false
-                              - name: git
-                                image: "bitnami/git:2.33.0"
-                                resourceLimitCpu: "500m"
-                                resourceLimitMemory: "512Mi"
-                                resourceRequestCpu: "500m"
-                                resourceRequestMemory: "512Mi"
-                                args: 1d
-                                command: sleep
-                                alwaysPullImage: false
-                                ttyEnabled: false
-                                envVars:
-                                  - envVar:
-                                      key: XDG_CONFIG_HOME
-                                      value: /secrets
-                            volumes:
-                              - persistentVolumeClaim:
-                                  mountPath: "/root/.m2"
-                                  claimName: m2
-                                  readOnly: false
-                              - secretVolume:
-                                  mountPath: "/secrets/docker"
-                                  secretName: "docker-config"
-                              - secretVolume:
-                                  mountPath: "/secrets/git"
-                                  secretName: "github-access-token"
-    overwritePlugins: true
-    installPlugins: false
-    sidecars:
-        configAutoReload:
-            env:
-                - name: METHOD
-                  value: "SLEEP"
-                - name: SLEEP_TIME
-                  value: "60"
-    ingress:
-        enabled: true
-        apiVersion: "networking.k8s.io/v1"
-    probes:
-        startupProbe:
-            initialDelaySeconds: 500
-        livenessProbe:
-            initialDelaySeconds: 500
-        readinessProbe:
-            initialDelaySeconds: 500
+                    }
+                  }
+                  projectFactories {
+                    workflowMultiBranchProjectFactory {
+                      scriptPath("Jenkinsfile")
+                    }
+                  }
+                  orphanedItemStrategy {
+                    discardOldItems {
+                      daysToKeep(1)
+                    }
+                  }
+                  buildStrategies {
+                    buildAnyBranches {
+                      strategies {
+                        buildChangeRequests {
+                          ignoreTargetOnlyChanges(true)
+                          ignoreUntrustedChanges(true)
+                        }
+                        buildRegularBranches()
+                        buildTags {
+                          atLeastDays("0")
+                          atMostDays("7")
+                        }
+                      }
+                    }
+                  }
+                  configure { node ->
+                    def traits = node / navigators / 'org.jenkinsci.plugins.github__branch__source.GitHubSCMNavigator' / traits
+                    traits << 'jenkins.scm.impl.trait.WildcardSCMSourceFilterTrait' {
+                      includes(config.repositories)
+                      excludes(config.excludes)
+                    }
+                    traits << 'org.jenkinsci.plugins.github__branch__source.BranchDiscoveryTrait' {
+                      strategyId(1)
+                    }
+                    traits << 'org.jenkinsci.plugins.github__branch__source.OriginPullRequestDiscoveryTrait' {
+                      strategyId(1)
+                    }
+                    traits << 'org.jenkinsci.plugins.github__branch__source.ForkPullRequestDiscoveryTrait' {
+                      strategyId(1)
+                      trust(class: 'org.jenkinsci.plugins.github_branch_source.ForkPullRequestDiscoveryTrait$' + config.trust)
+                    }
+                    traits << 'net.gleske.scmfilter.impl.trait.WildcardSCMHeadFilterTrait' {
+                      includes('main master PR-*')
+                      excludes()
+                      tagIncludes('*')
+                      tagExcludes()
+                    }
+                    traits << 'org.jenkinsci.plugins.github.label.filter.PullRequestLabelsBlackListFilterTrait' {
+                      labels('on-hold ci-skip')
+                    }
+                    traits << 'jenkins.plugins.git.traits.LocalBranchTrait' {
+                      // empty
+                    }
+                  }
+                }
+              }
+      pipeline-library: |
+        unclassified:
+          globalLibraries:
+            libraries:
+              - defaultVersion: "master"
+                implicit: true
+                name: "pipeline-library"
+                retriever:
+                  modernSCM:
+                    scm:
+                      git:
+                        id: "github-access-token"
+                        remote: "https://github.com/garethjevans/pipeline-library.git"
+      location: |
+        unclassified:
+          location:
+            adminAddress: "nobody@jenkins.io"
+            url: "http://34.149.103.207.nip.io/"
+      agent-settings: |
+        jenkins:
+          clouds:
+            - kubernetes:
+                containerCapStr: "100"
+                jenkinsUrl: "http://jenkins:8080"
+                maxRequestsPerHostStr: "300"
+                webSocket: true
+                name: "kubernetes"
+                namespace: "jenkins"
+                podRetention: "Never"
+                serverUrl: "https://kubernetes.default"
+                podLabels:
+                  - key: "jenkins/jenkins-agent"
+                    value: "true"
+                templates:
+                  - name: default
+                    label: maven
+                    nodeSelector: "kubernetes.io/os=linux"
+                    containers:
+                      - name: jnlp
+                        image: "jenkins/inbound-agent:latest-jdk11"
+                        resourceLimitCpu: "500m"
+                        resourceLimitMemory: "512Mi"
+                        resourceRequestCpu: "500m"
+                        resourceRequestMemory: "512Mi"
+                        alwaysPullImage: true
+                      - name: maven
+                        image: "maven:3.8-eclipse-temurin-11-alpine"
+                        resourceLimitCpu: "1000m"
+                        resourceLimitMemory: "1024Mi"
+                        resourceRequestCpu: "500m"
+                        resourceRequestMemory: "512Mi"
+                        args: 1d
+                        command: sleep
+                        alwaysPullImage: false
+                        ttyEnabled: false
+                      - name: helm
+                        image: "alpine/helm:3.9.0"
+                        resourceLimitCpu: "500m"
+                        resourceLimitMemory: "512Mi"
+                        resourceRequestCpu: "500m"
+                        resourceRequestMemory: "512Mi"
+                        args: 1d
+                        command: sleep
+                        alwaysPullImage: false
+                        ttyEnabled: false
+                      - name: kaniko
+                        image: "gcr.io/kaniko-project/executor:v1.6.0-debug"
+                        resourceLimitCpu: "500m"
+                        resourceLimitMemory: "512Mi"
+                        resourceRequestCpu: "500m"
+                        resourceRequestMemory: "512Mi"
+                        args: 1d
+                        command: sleep
+                        alwaysPullImage: true
+                        ttyEnabled: false
+                      - name: git
+                        image: "bitnami/git:2.33.0"
+                        resourceLimitCpu: "500m"
+                        resourceLimitMemory: "512Mi"
+                        resourceRequestCpu: "500m"
+                        resourceRequestMemory: "512Mi"
+                        args: 1d
+                        command: sleep
+                        alwaysPullImage: false
+                        ttyEnabled: false
+                        envVars:
+                          - envVar:
+                              key: XDG_CONFIG_HOME
+                              value: /secrets
+                    volumes:
+                      - persistentVolumeClaim:
+                          mountPath: "/root/.m2"
+                          claimName: m2
+                          readOnly: false
+                      - secretVolume:
+                          mountPath: "/secrets/docker"
+                          secretName: "docker-config"
+                      - secretVolume:
+                          mountPath: "/secrets/git"
+                          secretName: "github-access-token"
+  overwritePlugins: true
+  installPlugins: false
+  sidecars:
+    configAutoReload:
+      env:
+        - name: METHOD
+          value: "SLEEP"
+        - name: SLEEP_TIME
+          value: "60"
+  ingress:
+    enabled: true
+    apiVersion: "networking.k8s.io/v1"
+  probes:
+    startupProbe:
+      initialDelaySeconds: 500
+    livenessProbe:
+      initialDelaySeconds: 500
+    readinessProbe:
+      initialDelaySeconds: 500
