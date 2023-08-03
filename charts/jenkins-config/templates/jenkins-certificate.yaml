@@ -9,4 +9,4 @@ spec:
     name: letsencrypt-prod
     kind: ClusterIssuer
   dnsNames:
-  - jenkins.104.154.50.208.nip.io
+  - jenkins.34.79.8.43.nip.io
