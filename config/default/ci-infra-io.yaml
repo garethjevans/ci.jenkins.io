@@ -5,7 +5,7 @@ persistence:
   size: 100Gi
 controller:
   image: garethjevans/jenkins
-  tag: 0.23.3-2.387.2-jdk11
+  tag: 0.25.18-2.401.3-jdk11
   imagePullPolicy: IfNotPresent
   resources:
     requests:
@@ -75,7 +75,7 @@ controller:
             usageStatisticsEnabled: true
       misc-unclassified: |
         unclassified:
-          gitSCM:
+          scmGit:
             createAccountBasedOnEmail: false
             globalConfigEmail: "oscar@example.com"
             globalConfigName: "oscar"
